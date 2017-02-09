@@ -1,0 +1,48 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionFaqTabbed>
+
+@using DotSee.UmbracoExtensions;
+
+@{
+    SectionFaqTabbed currSection = Model;
+}
+
+<section id ="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() ptb-60 ptb-sm-60">
+    <div class="container">
+        <h3 class="text-center">@currSection.Name</h3>
+        <div class="tabs b-lrb-none">
+            <ul>
+            @foreach (DFaqTabItem item in currSection.Children<DFaqTabItem>())
+            {
+                string icon = (item.Icon == null) ? "" : item.Icon.ToString();
+                <li><a href="#tabs-@item.Position()+1">
+                    @if (!string.IsNullOrEmpty(icon)) { 
+                        <i class="ion @icon left"></i>
+                    }
+                    @item.Name</a></li>
+            }
+            </ul>
+            <div class="ui-tab-content">
+                @foreach (DFaqTabItem item in currSection.Children<DFaqTabItem>())
+                {
+                    <div id="tabs-@item.Position()+1" class="plr-0">
+                        <!-- Accordion -->
+                        <div class="accordion">
+                            @foreach (DFaqItem faqItem in item.Children<DFaqItem>())
+                            {
+                                <div class="accordion-section">
+                                    <h6 class="accordion-title">@faqItem.Name</h6>
+                                    <div class="accordion-content">
+                                        @Html.Raw(faqItem.Answer)
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Faq Section -->
+
+

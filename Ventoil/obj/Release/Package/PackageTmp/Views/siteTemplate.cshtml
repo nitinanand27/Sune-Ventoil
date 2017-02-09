@@ -1,0 +1,104 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ClientDependency.Core.Mvc;
+@using DotSee.PropSense;
+@using DotSee.PageMetas;
+@using DotSee.UmbracoExtensions;
+
+@{
+    Layout = null;
+
+    IPublishedContent homePage = Model.Content.AncestorOrSelf(1);
+    IPublishedContent currPage = Model.Content;
+    ConfigGlobalSettings configPage = homePage.Descendant<ConfigGlobalSettings>();
+
+    //Check if page redirects to first subpage
+    currPage.CheckRedirectFirstSubPage();
+
+    Html.RequiresJs("/scripts/jquery-1.11.2.min.js");
+
+    Html.RequiresJs("/scripts/plugin/jquery.easing.js");
+    Html.RequiresJs("/scripts/jquery-ui.min.js");
+    Html.RequiresJs("/scripts/bootstrap.min.js");
+    Html.RequiresJs("/scripts/plugin/jquery.flexslider.js");
+    
+    Html.RequiresJs("/scripts/plugin/jquery.fitvids.js");
+    Html.RequiresJs("/scripts/plugin/jquery.viewportchecker.js");
+    Html.RequiresJs("/scripts/plugin/jquery.stellar.min.js");
+    Html.RequiresJs("/scripts/plugin/wow.min.js");
+    Html.RequiresJs("/scripts/plugin/jquery.colorbox-min.js");
+    Html.RequiresJs("/scripts/plugin/owl.carousel.min.js");
+    Html.RequiresJs("/scripts/plugin/isotope.pkgd.min.js");
+    Html.RequiresJs("/scripts/plugin/masonry.pkgd.min.js");
+    Html.RequiresJs("/scripts/plugin/imagesloaded.pkgd.min.js");
+    Html.RequiresJs("/scripts/plugin/jPushMenu.js");
+    Html.RequiresJs("/scripts/plugin/jquery.fs.tipper.min.js");
+    Html.RequiresJs("/scripts/plugin/mediaelement-and-player.min.js");
+    Html.RequiresJs("/scripts/theme.js");
+    Html.RequiresJs("/scripts/navigation.js");
+    Html.RequiresJs("/scripts/plugin/jquery.mb.YTPlayer.min.js");
+    Html.RequiresJs("/scripts/cookiebar/jquery.cookiebar.js");
+
+    MetaSettings settings = configPage.GetMetaSettings();
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    
+    @Html.CachedPartial("PageMetas", Model.Content, 300, true, false, new ViewDataDictionary { { "MetaSettings", settings } })
+    @Html.CachedPartial("PageIcons", Model.Content, 300, true, false)
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+    
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="/css/ionicons.css" />
+    <link rel="stylesheet" type="text/css" href="/css/plugin/jPushMenu.css" />
+    <link rel="stylesheet" type="text/css" href="/css/plugin/animate.css" />
+    <link rel="stylesheet" type="text/css" href="/css/jquery-ui.css"/>
+    <link rel="stylesheet" type="text/css" href="/scripts/cookiebar/jquery.cookiebar.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    @Html.Raw(configPage.ScriptInHeadElement)
+</head>
+
+@{
+    string bodyCssClass = "";
+    bodyCssClass =
+        (
+        (currPage.HasProperty(Psn_Pagehome.lightTopMenu) && currPage.GetPropertyValue<bool>(Psn_Pagehome.lightTopMenu)) 
+        ||
+        (currPage.DocumentTypeAlias == PageArticleItem.ModelTypeAlias && currPage.Ancestor<PageBlogList>().PostsInheritBackgroundImage && currPage.Ancestor<PageBlogList>().LightTopMenu)
+        ||
+        (currPage.DocumentTypeAlias == PagePortfolioItem.ModelTypeAlias && currPage.Ancestor<SectionPortfolio>().InheritBackgroundImage && currPage.Ancestor<PageContent>().LightTopMenu)
+        )
+        ? "background--dark" : "background--light";
+        
+}
+
+<body class="full-intro @bodyCssClass">
+    @Html.Raw(configPage.ScriptAfterBodyStart)
+    <section id="preloader">
+        <div class="loader" id="loader">
+            <div class="loader-img"></div>
+        </div>
+    </section>
+
+    <div class="wrapper">
+        <header class="header">
+            <div class="container">
+                @Html.CachedPartial("PageLogo", Model.Content, 3600, true)
+                @Html.CachedPartial("PageMenuTop", Model.Content, 3600, true)
+            </div>
+        </header>
+        @RenderBody()
+        @Html.CachedPartial("PageFooter", Model.Content, 3600, true)
+        <a class="scroll-top">
+            <i class="fa fa-angle-double-up"></i>
+        </a>
+    </div>
+    @Html.RenderJsHere();
+    @Html.Raw(configPage.ScriptBeforeBodyEnd)
+</body>
+
+</html>

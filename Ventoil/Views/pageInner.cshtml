@@ -1,0 +1,30 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<PageContent>
+
+@using DotSee.UmbracoExtensions;
+
+@{
+    Layout = "siteTemplate.cshtml";
+    PageContent currPage = Model.Content;
+}
+
+@Html.Partial("PageBackgroundImage", currPage)
+@{
+
+    if (currPage.Descendant(FolderSections.ModelTypeAlias) != null)
+    {
+        var items = currPage.Descendant(FolderSections.ModelTypeAlias).Children();
+        foreach (IPublishedContent item in items)
+        {
+            //Pass a value to make specific partials be pushed down a bit if no background image is set and they are first on the list.
+            bool pushDown = string.IsNullOrEmpty(currPage.PageBackgroundImage) && item.Equals(items.First());
+
+            bool useHorizontalRule = (item.Equals(items.Last())) ? false : true;
+
+            @Html.Partial("PageSectionRenderer", item, new ViewDataDictionary { { "useHorizontalRule", useHorizontalRule }, { "pushDown", pushDown } })
+
+        }
+    }
+
+}
+
+

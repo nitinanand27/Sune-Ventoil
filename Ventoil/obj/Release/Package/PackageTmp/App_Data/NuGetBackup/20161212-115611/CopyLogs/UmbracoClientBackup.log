@@ -1,0 +1,27 @@
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust filkopiering f”r Windows                              
+-------------------------------------------------------------------------------
+
+  Startade: Mon Dec 12 11:56:24 2016
+
+   K„lla : C:\Users\Studerande\Documents\Visual Studio 2016\Ventoil\Ventoil\Umbraco_Client\
+     M†l : C:\Users\Studerande\Documents\Visual Studio 2016\Ventoil\Ventoil\App_Data\NuGetBackup\20161212-115611\Umbraco_Client\
+
+    Filer: *.*
+	    
+  Alternativ: *.* /S /E /COPY:DAT /R:1000000 /W:30 
+
+------------------------------------------------------------------------------
+
+	                   0	C:\Users\Studerande\Documents\Visual Studio 2016\Ventoil\Ventoil\Umbraco_Client\
+
+------------------------------------------------------------------------------
+
+                  Totalt    Kopierat  ™verhoppat  Ej matchat  MISSLYCKAT       Extra
+  Kataloger:           1           0           1           0           0           0
+      Filer:           0           0           0           0           0           0
+       Byte:           0           0           0           0           0           0
+      Tider:     0:00:00     0:00:00                             0:00:00     0:00:00
+
+ Avslutades: Mon Dec 12 11:56:24 2016

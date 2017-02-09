@@ -1,0 +1,70 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Pagehome>
+@using ClientDependency.Core.Mvc;
+@using DotSee.UmbracoExtensions;
+
+@{   
+    Pagehome homePage = Model;
+
+    Image bgImgMedia = (Image)Umbraco.TypedMedia(homePage.Image);
+
+    string bgImg = (bgImgMedia == null) ? "/img/noimage.jpg?crop=0,0,1920,1200" : bgImgMedia.GetCropUrl(imageCropMode:global::Umbraco.Web.Models.ImageCropMode.Max, upScale:true, width:1920, height:1200);
+    string bgImgStyle = (string.IsNullOrEmpty(bgImg)) ? "" : "style=\"background-size:cover;background-image:url('" + bgImg + "')!important;\"";
+
+    string overlayCss = homePage.UseOverlay ?
+        homePage.UseLightOverlay ? "overlay-light" : "overlay-dark"
+        : "";
+
+    string textCss = homePage.UseLightTextColor ? "light-color" : "dark-color";
+    string nextSectionId = "";
+
+    try
+    {
+        nextSectionId = homePage.Descendant<FolderSections>().Children().OrderBy(x => x.SortOrder).First().Id.ToString();
+    } catch { }
+}
+
+        <section class="full-screen-intro">
+
+            <div class="media-wapper cont-h-100per" @Html.Raw(bgImgStyle)></div>
+
+            <div class="full-cap-wraper @overlayCss @textCss">
+                <div class="content-caption @textCss parallax parallax-opacity">
+                    <div class="container">
+                        <h1>@homePage.IntroTitle</h1>
+                        <h5>@homePage.IntroSubtitle</h5>
+                        <div class="row">
+                            <p class="lead col-md-8 col-md-offset-2">@Html.Raw(homePage.IntroSummary.Replace(Environment.NewLine, "<br/>"))</p>
+                        </div>
+                        <br>
+                        <div>
+                            @foreach (DLinkButton item in homePage.Descendant<FolderLinkButtons>().IfNotNull(x=>x.Children<DLinkButton>()))
+                            {
+                                @RenderButton(item, homePage.UseLightTextColor)
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+   
+            @if (!string.IsNullOrEmpty(nextSectionId))
+            {
+            <div class="intro-scroll-down">
+                <a class="scroll-down" href="#section_@nextSectionId">
+                    <span class="mouse">
+                        <span class="mouse-dot"></span>
+                    </span>
+                </a>
+            </div>
+            }
+            
+        </section>
+        <div class="clearfix"></div>
+
+@helper RenderButton (DLinkButton item, bool useLightColor)
+{ 
+    LinkItem link = item.GetLink();
+
+    string buttonCss = (useLightColor ? "btn-white" : "btn-black") + (item.FillButton ? "" : "-line");
+
+    <a href="@link.Url" target="@link.Target" class="btn btn-md @buttonCss">@item.Name</a>
+}

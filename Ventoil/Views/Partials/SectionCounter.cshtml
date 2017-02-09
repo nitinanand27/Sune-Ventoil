@@ -1,0 +1,57 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionCounter>
+
+@using DotSee.UmbracoExtensions;
+
+@{
+    SectionCounter currSection = Model;
+
+    int numberOfCounters = 1;
+    bool[] activeCounters = new bool[4] { true, false, false, false };
+
+    if (!currSection.Text2.Equals("")) { numberOfCounters++; activeCounters[1] = true; }
+    if (!currSection.Text3.Equals("")) { numberOfCounters++; activeCounters[2] = true; }
+    if (!currSection.Text4.Equals("")) { numberOfCounters++; activeCounters[3] = true; }
+
+    string cols = (12 / numberOfCounters).ToString();
+
+    IPublishedContent backgroundImage = Umbraco.TypedMedia(currSection.Image);
+    string bgImageCss = "";
+
+    //These will be the default values if no image is present.
+    string overlayCss = "overlay-dark80";
+    string colorCss = "light-color";
+
+    if (backgroundImage != null)
+    {
+        bgImageCss = "style=\"background-size:cover;background-image: url('" + backgroundImage.GetCropUrl(propertyAlias: "umbracoFile", upScale: true, width:1920, height:400) + "');\"";
+
+        overlayCss = (currSection.UseOverlay) ?
+          (currSection.UseLightOverlay) ? "overlay-light" : "overlay-dark"
+            : "";
+
+        colorCss = (currSection.UseLightTextColor) ? "light-color" : "dark-color";
+
+    }
+}
+
+        <section id="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() @overlayCss @colorCss ptb-80" @Html.Raw(bgImageCss)>
+            <div class="container text-center">
+                <div class="row">
+                    @for (int cnt = 1; cnt <= numberOfCounters; cnt++)
+                    {
+                        if (activeCounters[cnt - 1] == true) {
+                            //Deliberately using strings here -counter1 to counter4, text1 to text4
+                            string counterNumber = currSection.GetPropertyValue<string>("counter" + cnt.ToString());
+
+                            string counterText = currSection.GetPropertyValue<string>("text" + cnt.ToString());
+                            //string colorCss = currSection.UseLightTextColor ? "light-color" : "dark-color";
+                        <div class="col-md-@cols mb-sm-30 @colorCss">
+                            <h1 class="counter" data-count="@counterNumber">0</h1>
+                            <h6>@counterText</h6>
+                        </div>
+                        }
+                    }
+                </div>
+            </div>
+        </section>
+       

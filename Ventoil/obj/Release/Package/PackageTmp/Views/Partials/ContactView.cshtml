@@ -1,0 +1,98 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContactViewModel>
+@using DotSee.UmbracoExtensions
+@using DotSee.Models
+@using DotSee.Controllers
+@using Umbraco.Web
+@using ClientDependency.Core.Mvc;
+
+@{
+    Html.RequiresJs("/scripts/jquery.unobtrusive-ajax.min.js",9999);
+    Html.RequiresJs("/scripts/jquery.validate.min.js", 9999);
+    Html.RequiresJs("/scripts/jquery.validate.unobtrusive.min.js", 9999);
+
+    string currSectionId = ViewData["currSectionId"].ToString();
+    bool hideSubject = (bool)ViewData["hideSubject"];
+    bool hideName = (bool)ViewData["hideName"];
+    string[] dropDown1Data = (ViewData["dropDown1Data"] as string[]);
+    string[] dropDown2Data = (ViewData["dropDown2Data"] as string[]);
+}
+
+
+        <div class="row">
+            <div id="contactFormMessages" class="ptb-0 col-md-6 col-md-offset-3 text-center">
+                
+                <h6 id="contactSuccess" class="successContent">
+                    <i class="fa fa-check left" style="color: #5cb45d;"></i>@Umbraco.GetDictionaryValue("ContactForm.Success")
+                </h6>
+                
+                <h6 class="errorContent">
+                    <i class="fa fa-exclamation-circle left" style="color: #e1534f;"></i>@Umbraco.GetDictionaryValue("ContactForm.Failure")
+                </h6>
+                
+               </div>
+
+            <div id="contactFormHolder" class="col-md-6 col-md-offset-3">
+                @using (Ajax.BeginForm("Submit", "ContactSurface", new AjaxOptions
+                {
+                    HttpMethod = "POST",
+                    OnFailure = "ShowContactError",
+                    OnSuccess = "ShowContactSuccess"
+                }))
+                {
+
+                    @Html.HiddenFor(model => model.CurrentSectionId, new { Value = currSectionId })
+                    if (!hideName)
+                    {
+                        <div class="form-field-wrapper">
+                            @Html.TextBoxFor(model => model.Name, new { @Placeholder = Umbraco.GetDictionaryValue("ContactForm.Name"), @class = "input-sm form-full" })
+                        </div>
+                    }
+                    <div class="form-field-wrapper">
+                        @Html.TextBoxFor(model => model.Email, new { @Placeholder = Umbraco.GetDictionaryValue("ContactForm.Email"), @class = "input-sm form-full" })
+                        @Html.ValidationMessageFor(model => model.Email, Umbraco.GetDictionaryValue("ContactForm.Email.Invalid"))
+                    </div>
+                    if (!hideSubject)
+                    {
+                        <div class="form-field-wrapper">
+                            @Html.TextBoxFor(model => model.Subject, new { @Placeholder = Umbraco.GetDictionaryValue("ContactForm.Subject"), @class = "input-sm form-full" })
+                        </div>
+                    }
+                    <div class="form-field-wrapper">
+                        @Html.TextAreaFor(model => model.Message, new { @Placeholder = Umbraco.GetDictionaryValue("ContactForm.Message"), @class = "form-full", @rows = 7 })
+                        @Html.ValidationMessageFor(model => model.Message, Umbraco.GetDictionaryValue("ContactForm.Message.Required"))
+                    </div>
+                    if (dropDown1Data != null && dropDown1Data.Length > 1)
+                    {
+                        @Html.DropDownListFor(model => model.DropDown1, dropDown1Data.Select(f => new SelectListItem { Value = f, Text = f }).Skip(1), dropDown1Data[0], new { @class = "form-full" })
+                    }
+                    if (dropDown2Data != null && dropDown2Data.Length > 1)
+                    {
+                        @Html.DropDownListFor(model => model.DropDown2, dropDown2Data.Select(f => new SelectListItem { Value = f, Text = f }).Skip(1), dropDown2Data[0], new { @class = "form-full" })
+                    }
+                    <button class="btn btn-md btn-black form-full" type="submit" id="form-submit" name="submit">@Umbraco.GetDictionaryValue("ContactForm.Submit")</button>
+                }
+            </div>
+        </div>
+
+<script type="text/javascript">
+
+    function ShowContactError() {
+         $(".errorContent").show();
+            $("#contactFormHolder").hide();
+    }
+
+    function ShowContactSuccess(arg) {
+        if (arg.Success === true) {
+            $("#contactSuccess").show();
+            $("#contactFormHolder").hide();
+        }
+        else
+        {
+            $(".successContent").show();
+            $("#contactFormHolder").hide();
+
+        }
+    }
+
+</script>
+

@@ -1,0 +1,39 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionFaq>
+
+@using DotSee.UmbracoExtensions
+
+@{
+    SectionFaq currSection = Model;
+    bool isPartOfMultiCol = currSection.Parent.DocumentTypeAlias == SectionMultiCol.ModelTypeAlias;
+    string multiColCss = (isPartOfMultiCol) ? ViewData["multiColCss"].ToString() : "col-md-10 col-md-offset-1";
+}
+
+        <section id="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() ptb-60 ptb-sm-60">
+            <div class="container">
+                @if (isPartOfMultiCol)
+                {
+                    <h4>@currSection.Name</h4>
+                }
+                else
+                {
+                     <h3 class="text-center">@currSection.Name</h3>
+                }
+                <div class="spacer-15"></div>
+                <div class="@multiColCss">
+                    <div class="accordion">
+                        @foreach (DFaqItem item in currSection.Children<DFaqItem>())
+                        {
+
+                            <div class="accordion-section">
+                                <h6 class="accordion-title">@item.Name</h6>
+                                <div class="accordion-content">
+                                    @Html.Raw(item.Answer)
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+               
+            </div>
+        </section>
+      

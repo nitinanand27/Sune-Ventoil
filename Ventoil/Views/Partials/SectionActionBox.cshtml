@@ -1,0 +1,44 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionActionBox>
+
+@using DotSee.UmbracoExtensions;
+
+@{
+    SectionActionBox currSection = Model;
+
+    LinkItem link = currSection.GetLink();
+    string targetUrl = "";
+    string target = "";
+    string linkClass = "";
+    if (!string.IsNullOrEmpty(link.Url))
+    {
+        targetUrl = link.Url;
+        target = link.Target;
+    }
+
+    IPublishedContent backgroundImage = Umbraco.TypedMedia(currSection.Image);
+    string bgImageCss = "";
+    string overlayCss = (currSection.UseOverlay) ?
+        (currSection.UseLightOverlay) ? "overlay-light" : "overlay-dark"
+        : "";
+    string colorCss = (currSection.UseLightTextColor) ? "dark-bg" : "light-bg";
+
+    if (backgroundImage != null)
+    {
+        bgImageCss = "style=\"background-size:cover;background-image: url('" + backgroundImage.GetCropUrl(propertyAlias: "umbracoFile", upScale: true, width:1920, height:400) + "');\"";
+    }
+    string buttonCss = (currSection.UseLightTextColor ? "btn-white" : "btn-black");
+}
+    <section id="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() @overlayCss @colorCss ptb-60 ptb-sm-60" @Html.Raw(bgImageCss)>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-sm-8">
+                        <h4 class="">@currSection.Name</h4>
+                        <p class="mb-0">@currSection.Summary</p>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <a href="@targetUrl" target="@target" class="@linkClass btn btn-md @buttonCss float-right float-none-xs">@currSection.ButtonText</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+

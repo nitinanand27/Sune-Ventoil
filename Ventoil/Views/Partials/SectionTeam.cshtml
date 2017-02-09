@@ -1,0 +1,105 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionTeam>
+
+@using DotSee.UmbracoExtensions;
+@using DotSee.PropSense;
+
+@{
+    SectionTeam currSection = Model;
+}
+
+<section id ="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() ptb-60 ptb-sm-60">
+    <div class="container">
+        
+        @if (!currSection.HideTitle)
+        {
+        <div class="row text-center">
+            <h3>@currSection.Name</h3>
+        </div>
+        <div class="spacer-60"></div>
+        }
+        
+        <div class="row">
+            
+            <div class="owl-carousel team-carousel nf-carousel-theme">
+                @foreach (DTeamItem item in currSection.Children<DTeamItem>())
+                {
+                    //Item.Image.GetCropUrl("Default") seems not to work for some reason. Reverting to old style
+                    string image = item.GetCropUrl(Psn_dTeamItem.image, "Default");
+                    LinkItem link = item.GetLink();
+
+
+                    <div class="item">
+                        <div class="team-item nf-col-padding">
+
+                            <div class="team-item-img">
+                                <img src="@image" alt="@item.Name" />
+                                <div class="team-item-detail">
+                                    <div class="team-item-detail-inner light-color">
+                                        @if (!string.IsNullOrEmpty(link.Url))
+                                        {
+                                            <a href="@link.Url" target="@link.Target">
+                                                <h5>@item.Name</h5>
+                                                <p>@item.Summary</p>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <h5>@item.Name</h5>
+                                            <p>@item.Summary</p>
+                                        }
+                                        <ul class="social">
+                                            @SocialLinkList(item.FacebookUrl, "fa-facebook")
+                                            @SocialLinkList(item.LinkedinUrl, "fa-linkedin")
+                                            @SocialLinkList(item.PinterestUrl, "fa-pinterest")
+                                            @SocialLinkList(item.TwitterUrl, "fa-twitter")
+                                            @SocialLinkList(item.YoutubeUrl, "fa-youtube")
+                                            @SocialLinkList(item.GooglePlusUrl, "fa-google-plus")
+                                            @SocialLinkList(item.GithubUrl, "fa-github")
+                                            @SocialLinkList(item.TumblrUrl, "fa-tumblr")
+                                            @SocialLinkList(item.VimeoUrl, "fa-vimeo")
+                                            @SocialLinkList(item.PersonalPageUrl, "fa-external-link")
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="team-item-info">
+                                @if (!string.IsNullOrEmpty(link.Url))
+                                {
+                                    <h5><a href="@link.Url" target="@link.Target">@item.Name</a></h5>
+                                        <p class=""><a href="@link.Url" target="@link.Target">@item.Role</a></p>
+                                }
+                                else
+                                {
+                                    <h5>@item.Name</h5>
+                                        <p class="">@item.Role</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+
+
+@helper  SocialLinkList(string url, string iconClass)
+{
+if (!string.IsNullOrEmpty(url))
+{
+    if (!url.StartsWith("http"))
+    {
+        url = "http://" + url;
+    }
+    @Html.Raw("<li><a href=\"" + url + "\" target=\"_blank\"><i class=\"fa " + iconClass + " \"></i></a></li>");
+}
+else {
+        @Html.Raw("");
+    }
+
+}

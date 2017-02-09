@@ -1,0 +1,72 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionContentSlider>
+
+@using DotSee.UmbracoExtensions
+
+@{
+    SectionContentSlider currSection = Model;
+}
+
+<section id="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() ptb-60 ptb-sm-60">
+    <div class="owl-carousel content-carousel content-slider">
+        @foreach (DContentSliderItem item in currSection.Children<DContentSliderItem>())
+        {
+            var content = item.Content;
+            string imageUrl = Umbraco.TypedMedia(item.Image).GetCropUrl(550);
+            string position = Umbraco.GetPreValueAsString((int)item.ImagePosition);
+            LinkItem link = item.GetLink();
+            string buttonText = item.ButtonText;
+
+            <div class="item">
+                <div class="container">
+                    <div class="row">
+                        @switch (position)
+                        {
+                            case "Left":
+
+                                <div class="col-md-6 mb-sm-30">
+                                    <img src="@imageUrl" alt="@item.Name" />
+                                </div>
+                                <div class="col-md-5 col-md-offset-1">
+                                    <h3>@item.Name</h3>
+                                    <div class="spacer-15"></div>
+                                    @Html.Raw(content)
+                                    <div class="spacer-15"></div>
+                                    @if (!string.IsNullOrEmpty(link.Url) && !string.IsNullOrEmpty(buttonText))
+                                    {
+                                        <a href="@link.Url" target="@link.Target" class="btn btn-md btn-black">@buttonText</a>
+                                    }
+                                </div>
+
+                                break;
+
+                            case "Right":
+
+                                <div class="col-md-5 mb-sm-30">
+                                    <h3>@item.Name</h3>
+                                    <div class="spacer-15"></div>
+                                    @Html.Raw(content)
+                                    <div class="spacer-15"></div>
+                                    @if (!string.IsNullOrEmpty(link.Url) && !string.IsNullOrEmpty(buttonText))
+                                    {
+                                        <a href="@link.Url" target="@link.Target" class="btn btn-md btn-black">@buttonText</a>
+                                    }
+
+
+                                </div>
+
+                                <div class="col-md-6 col-md-offset-1">
+
+                                    <img src="@imageUrl" alt="@item.Name" />
+                                </div>
+
+                                break;
+                        }
+
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</section>
+

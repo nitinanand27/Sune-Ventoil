@@ -1,0 +1,56 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Pagehome>
+@using DotSee.UmbracoExtensions;
+
+@{ 
+    Pagehome homePage = Model;
+
+    string youtubeUrl = "https://youtu.be/" + homePage.YoutubeVideoId;
+
+    Image bgImgMedia = (Image)Umbraco.TypedMedia(homePage.Image);
+
+    string bgImg = (bgImgMedia == null) ? "" : bgImgMedia.GetCropUrl(imageCropMode: global::Umbraco.Web.Models.ImageCropMode.Max, upScale: true);
+    string bgImgStyle = (string.IsNullOrEmpty(bgImg)) ? "/img/noimage.jpg?crop=0,0,1920,1200" : "style=\"background-size:cover;background-image:url('" + bgImg + "')!important;\"";
+
+    string overlayCss = homePage.UseOverlay ?
+        homePage.UseLightOverlay ? "overlay-light" : "overlay-dark"
+        : "";
+
+   }
+
+        <section id="intro" class="full-screen-intro " @Html.Raw(bgImgStyle)>
+            <div class="media-wapper">
+
+                <div id="video" class="ytp-player" data-property="{videoURL:'@youtubeUrl',containment:'#intro', showControls:false, autoPlay:true, loop:true, mute:true, startAt:6, opacity:1, addRaster:false, quality:'default'}"></div>
+
+            </div>
+            <div class="full-cap-wraper @overlayCss">
+                <div class="content-caption light-color">
+                    <div class="container">
+                        <h1>@homePage.IntroTitle</h1>
+                        <h5>@homePage.IntroSubtitle</h5>
+                        <div class="row">
+                            <p class="lead col-md-6 col-md-offset-3">@homePage.IntroSummary</p>
+                        </div>
+                        <br>
+
+
+                        @foreach (DLinkButton item in homePage.Descendants<DLinkButton>())
+                        {
+                            @RenderButton(item, homePage.UseLightTextColor)
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <div class="clearfix"></div>
+
+@helper RenderButton(DLinkButton item, bool useLightColor)
+{
+LinkItem link = item.GetLink();
+
+string buttonCss = (useLightColor ? "btn-white" : "btn-black") + (item.FillButton ? "" : "-line");
+
+    <a href="@link.Url" target="@link.Target" class="btn btn-md @buttonCss">@item.Name</a>
+}

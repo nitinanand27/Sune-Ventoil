@@ -1,0 +1,44 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionTestimonials>
+
+@using DotSee.UmbracoExtensions;
+
+@{
+    SectionTestimonials currSection = Model;
+    LinkItem link = currSection.GetLink();
+
+    IPublishedContent backgroundImage = Umbraco.TypedMedia(currSection.Image);
+    string bgImageCss = "";
+    string overlayCss = (currSection.UseOverlay) ?
+        (currSection.UseLightOverlay) ? "overlay-light80" : "overlay-dark80"
+        : "";
+    string colorCss = (currSection.UseLightTextColor) ? "dark-bg" : "light-bg";
+    string carouselColorCss = (currSection.UseLightTextColor) ? "white" : "dark";
+    if (backgroundImage != null)
+    {
+        bgImageCss = "style=\"background-image: url('" + backgroundImage.GetCropUrl(propertyAlias: "umbracoFile", upScale: true) + "'); background-size: cover;\"";
+
+    }
+}
+
+<section id="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() @overlayCss @colorCss ptb ptb-sm-60" @Html.Raw(bgImageCss)>
+    <div class="container">
+        <div class="owl-carousel testimonial-carousel nf-carousel-theme @carouselColorCss">
+            
+            @foreach (DTestimonialItem item in currSection.Children<DTestimonialItem>())
+            {
+                string additionalInfo = item.AuthorAdditionalInfo;
+                if (!string.IsNullOrEmpty(additionalInfo)) { additionalInfo = " ( " + additionalInfo + " )"; }
+
+                <div class="item">
+                    <div class="testimonial text-center dark-color">
+                        <div class="container-icon"><i class="fa fa-quote-right"></i></div>
+                        <p class="lead">@item.Lead</p>
+                        <h6 class="quote-author">@item.Name<span style="font-weight: 400;">@additionalInfo</span></h6>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</section>
+

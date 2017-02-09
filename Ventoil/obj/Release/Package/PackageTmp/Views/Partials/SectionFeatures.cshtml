@@ -1,0 +1,64 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionFeatures>
+
+@using DotSee.UmbracoExtensions;
+
+@{
+
+    SectionFeatures currSection = Model;
+}
+
+<section id="section_@currSection.Id.ToString()" class="ptb-60 ptb-sm-60">
+    <div class="container text-center">
+        <h3 class="mt-sm">@currSection.Name</h3>
+        <p class="lead">@currSection.Subtitle</p>
+        <div class="spacer-60"></div>
+        <div class="row">
+            <div class="wow fadeInLeft col-md-4 pt-15 pt-sm-0">
+
+                @foreach (DFeatureItem item in currSection.Children<DFeatureItem>().Where(x => Umbraco.GetPreValueAsString((int)x.Position).Equals("Left")))
+                {
+                   @DisplayFeature(item, true)
+                }
+
+            </div>
+            <div class="wow fadeIn col-md-4 hidden-sm hidden-xs text-center">
+                <img src="@Umbraco.TypedMedia(currSection.CenterImage).GetCropUrl(width:350, imageCropMode:global::Umbraco.Web.Models.ImageCropMode.Max).ToString()" />
+            </div>
+            <div class="wow fadeInRight col-md-4 pt-15 pt-sm-0">
+
+                @foreach (DFeatureItem item in currSection.Children<DFeatureItem>().Where(x => Umbraco.GetPreValueAsString((int)x.Position).Equals("Right")))
+                {
+                 @DisplayFeature(item, false)
+                }
+               
+            </div>
+        </div>
+    </div>
+</section>
+
+@helper DisplayFeature(DFeatureItem item, bool isLeft)
+{
+
+string icon = item.Icon.IfNull(x => "").ToString();
+LinkItem link = item.GetLink();
+string position = (isLeft) ? "right" : "left";
+
+    <div class="features-box-@position">
+        @if (!string.IsNullOrEmpty(link.Url))
+        {
+            <a href="@link.Url" target="@link.Target">
+                <div class="features-icon-@position"><i class="ion @icon"></i></div>
+                <h5>@item.Name</h5>
+                <p>@item.Summary</p>
+            </a>
+        }
+        else
+        {
+            
+                <div class="features-icon-@position"><i class="ion @icon"></i></div>
+                <h5>@item.Name</h5>
+                <p>@item.Summary</p>
+            
+        }
+    </div>
+}

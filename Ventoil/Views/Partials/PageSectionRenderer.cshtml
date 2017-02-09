@@ -1,0 +1,148 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage
+
+    @using DotSee.UmbracoExtensions;
+@using Umbraco.Web;
+    @using Umbraco.Web.PublishedContentModels;
+@using System.Reflection;
+
+@{
+
+    UmbracoHelper u = DotSee.ContentHelper.GetHelper();
+
+    bool useHr = (bool)ViewData["useHorizontalRule"];
+    bool pushDown = (ViewData["pushDown"] != null) ? (bool)ViewData["pushDown"] : false;
+
+    if (pushDown)
+    {
+        <div class="spacer-75"></div>
+    }
+
+    switch (Model.DocumentTypeAlias)
+    {
+        case SectionText.ModelTypeAlias:
+            @Html.Partial("SectionText", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+        case SectionAccordion.ModelTypeAlias:
+            @Html.Partial("SectionAccordion", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+        case SectionMultiCol.ModelTypeAlias:
+            @Html.Partial("SectionMultiCol", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+        case SectionPercentages.ModelTypeAlias:
+            @Html.Partial("SectionPercentages", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+        case SectionImageGallery.ModelTypeAlias:
+            @Html.Partial("SectionImageGallery", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+        case SectionPortfolio.ModelTypeAlias:
+            @Html.Partial("SectionPortfolio", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+        case SectionCounter.ModelTypeAlias:
+            @Html.Partial("SectionCounter", Model)
+            break;
+
+        case SectionTestimonials.ModelTypeAlias:
+            @Html.Partial("SectionTestimonials", Model)
+            break;
+
+        case SectionStatement.ModelTypeAlias:
+            @Html.Partial("SectionStatement", Model)
+            break;
+
+        case SectionServices.ModelTypeAlias:
+            @Html.Partial("SectionServices", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+        case SectionActionBox.ModelTypeAlias:
+            @Html.Partial("SectionActionBox", Model)
+            break;
+
+        case SectionClientLogos.ModelTypeAlias:
+            @Html.Partial("SectionClientLogos", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+        case SectionProcess.ModelTypeAlias:
+            @Html.Partial("SectionProcess", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+        case SectionFeatures.ModelTypeAlias:
+            @Html.Partial("SectionFeatures", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+        case SectionContentSlider.ModelTypeAlias:
+            @Html.Partial("SectionContentSlider", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+        case SectionPricing.ModelTypeAlias:
+            @Html.Partial("SectionPricing", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+        case SectionFaq.ModelTypeAlias:
+            @Html.Partial("SectionFaq", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+        case SectionFaqTabbed.ModelTypeAlias:
+            @Html.Partial("SectionFaqTabbed", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+        case SectionTeam.ModelTypeAlias:
+
+            switch (u.GetPreValueAsString((int)((SectionTeam)Model).Appearance))
+            {
+                case "Grid":
+                    @Html.Partial("SectionTeamGrid", Model)
+                    @DisplaySeparator(useHr)
+                    break;
+
+                case "Slider":
+                    @Html.Partial("SectionTeam", Model)
+                    @DisplaySeparator(useHr)
+                    break;
+
+            }
+            break;
+
+        case SectionPlaceholder.ModelTypeAlias:
+            
+            string nodeIds = ((SectionPlaceholder)Model).ReusableElements;
+            foreach (IPublishedContent sectionItem in Model.GetPickerItemsByValue(nodeIds))
+            {
+                @Html.Partial("PageSectionRenderer", sectionItem)
+            }
+            break;
+
+        case SectionContact.ModelTypeAlias:
+            @Html.Partial("SectionContact", Model)
+            @DisplaySeparator(useHr)
+            break;
+
+    }
+}
+
+@helper DisplaySeparator(bool doDisplay) { 
+
+    if (doDisplay)
+    {
+        <hr/>
+    }
+}

@@ -1,0 +1,97 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<PageBlogListViewModel>
+@using DotSee.UmbracoExtensions;
+@using DotSee.MazelBlog;
+@using DotSee.Models;
+
+@{
+    PageBlogListViewModel currPage = Model.Content;
+    Layout = "siteTemplate.cshtml";
+    int recordsPerPage = (currPage.PostsPerPage >= 1) ? currPage.PostsPerPage : 5;
+    string sectionCss = (!string.IsNullOrEmpty(currPage.PageBackgroundImage)) ? "ptb-60 ptb-sm-60" : "ptb ptb-sm-80 ptb-xs-80";
+}
+
+@Html.Partial("PageBackgroundImage", currPage)
+
+<section class="@sectionCss">
+    <div class="container">
+        <div class="row">
+           
+            <div class="col-lg-9 col-md-9">
+                <div class="row">
+
+                    <div class="col-md-12 blog-post-hr">
+
+                        @if (!string.IsNullOrEmpty(currPage.CustomMessage))
+                        {
+                            <h6 class="warning">@currPage.CustomMessage - <a class="btn btn-sm" href="@currPage.Url">@Umbraco.GetDictionaryValue("Blog.FilterBy.Cancel")</a></h6>
+                            <div class="spacer-30"></div>
+                        }
+
+                      @foreach (PageArticleItem item in currPage.BlogPosts) {
+
+                          IPublishedContent image = item.GetPostListImage();
+                          string imageUrl = (image!=null)? image.GetCropUrl(width: 850, height: 478, upScale:true) : "";
+
+                          IPublishedContent author = item.GetPickerItemsByValue(item.Author).FirstOrDefault();
+                          string authorName = (author != null) ? author.GetPageTitleForMenu() : null;
+
+                        <div class="blog-post mb-30">
+                            
+                            @if (!string.IsNullOrEmpty(imageUrl))
+                            {
+                                <div class="post-media">
+                                    <img src="@imageUrl" alt="@item.GetPageTitleInternal()" />
+                                </div>
+                            }
+
+                            <div class="post-meta">
+                            @if (!string.IsNullOrEmpty(item.Author))
+                            {
+                                <span><a>@item.GetPickerItemsByValue(item.Author).FirstOrDefault().GetPageTitleForMenu()</a>,</span> 
+                            }
+
+                            <span>@item.GetPostDate()</span></div>
+                     
+                            <div class="post-header">
+                                <h4><a href="@item.Url">@item.GetPageTitleForMenu()</a></h4>
+                            </div>
+                            <div class="post-entry">
+                                @item.Summary
+                            </div>
+
+                            @if (item.Tags!=null)
+                            {
+                                <div class="post-tag pull-left">
+                                    @foreach (string tag in item.Tags.ToString().Split(','))
+                                    {
+                                        string link = string.Concat(currPage.Url, "?t=", tag);
+                                        <span><a href="@link">@tag</a></span>
+                                    }
+                                </div>
+                            }
+
+                            <div class="post-more-link pull-right"><a href="@item.Url">@Umbraco.GetDictionaryValue("Blog.ReadMore")<i class="fa fa-long-arrow-right right"></i></a></div>
+                        </div>
+
+                        <hr />
+                      }
+  
+                    </div>
+                </div>
+
+                @if (currPage.TotalPages > 1)
+                {
+                    @Html.Partial("PagePager", new ViewDataDictionary { { "totalPages", currPage.TotalPages }, { "totalItems", currPage.TotalItems }, { "page", currPage.Page }, {"recordsPerPage", recordsPerPage } })
+                }
+            </div>
+           
+            <div class="col-lg-3 col-md-3 mt-sm-60">
+                @Html.CachedPartial("BlogCategories", currPage, 3600, true, false, null)
+                @Html.CachedPartial("BlogRecentArticles", currPage, 3600, true, false, null)
+                @Html.CachedPartial("BlogPopularTags", currPage, 3600, true, false, null)
+            </div>
+            
+        </div>
+    </div>
+</section>
+<!-- End Blog Post Section -->

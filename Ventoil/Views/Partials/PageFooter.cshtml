@@ -1,0 +1,218 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage
+@using DotSee.UmbracoExtensions;
+@using System.Web.Mvc
+@using System.Web.Mvc
+@{ 
+
+    IPublishedContent currPage = Model;
+    Pagehome homePage = (Pagehome)currPage.AncestorOrSelf(1);
+    ConfigGlobalSettings configPage = homePage.Descendant<ConfigGlobalSettings>();
+
+    //-------------------------------------------------------------------
+    //Image and optional image link
+    //-------------------------------------------------------------------
+    string defaultLogo = configPage.DefaultLogo.IfNull(x=>"").ToString();
+    string userImage = configPage.FooterImage.IfNull(x=>"").ToString();
+    //If user image is not set, use default logo
+    string footerImage = (string.IsNullOrEmpty(userImage)) ? defaultLogo : userImage;
+    string footerImageLinkExternal = configPage.FooterImageLinkExternal;
+
+    //Fix missing http
+    if (!footerImageLinkExternal.StartsWith("http")) { footerImageLinkExternal = "http://" + footerImageLinkExternal; }
+
+    bool footerImageLinkNewWindow = configPage.FooterImageLinkNewWindow;
+
+    IPublishedContent footerImageLinkNode = configPage.GetPickerItemsByValue(configPage.FooterImageLinkInternal).FirstOrDefault();
+
+    //Get the actual link. External link has precedence, then internal link, then null if everything empty
+    string footerImageLink = (!string.IsNullOrEmpty(footerImageLinkExternal)) ? footerImageLinkExternal
+    : ((footerImageLinkNode != null)
+    ? Umbraco.Url(footerImageLinkNode.Id)
+    : null);
+
+    //-------------------------------------------------------------------
+    //Text under image and optional link under text
+    //-------------------------------------------------------------------
+    string footerText = configPage.FooterText.ToString();
+    string footerLinkText = configPage.FooterLinkText;
+    string footerLinkExternal = configPage.FooterLinkExternal.IfNull(x => "");
+
+    //Fix missing http
+    if (!footerLinkExternal.StartsWith("http")) { footerLinkExternal = "http://" + footerLinkExternal; }
+
+    IPublishedContent footerLinkNode = configPage.GetPickerItemsByValue(configPage.FooterLinkInternal).FirstOrDefault();
+
+    //Get the actual link. External link has precedence, then internal link, then null if everything empty
+    string footerLink =
+        (!string.IsNullOrEmpty(footerLinkExternal)) ? footerLinkExternal
+        : ((footerLinkNode != null)
+            ? Umbraco.Url(footerLinkNode.Id)
+            : null);
+
+    //Check the link text. If text is empty and it is an internal link, take the node's title (for menus).
+    if (string.IsNullOrEmpty(footerLinkText) && footerLinkNode != null && string.IsNullOrEmpty(footerLinkExternal))
+    {
+        footerLinkText = footerLinkNode.GetPageTitleForMenu();
+    }
+    //In all other cases, just set a default title in case title is empty
+    //else if (string.IsNullOrEmpty(footerLinkText)) {
+    //    footerLinkText = "READ MORE";
+    //}
+
+    bool footerLinkNewWindow = configPage.FooterLinkNewWindow;
+    string footerLinkTarget = (footerLinkNewWindow) ? "_blank" : null;
+
+
+    //-------------------------------------------------------------------
+    //Footer links (2 columns)
+    //-------------------------------------------------------------------
+    IEnumerable<IPublishedContent> footerPageLinksColumn1 = configPage.GetPickerItemsByValue(configPage.FooterPageLinksColumn1);
+    IEnumerable<IPublishedContent> footerPageLinksColumn2 = configPage.GetPickerItemsByValue(configPage.FooterPageLinksColumn2);
+
+    //-------------------------------------------------------------------
+    //Other data (address, tel., email)
+    //-------------------------------------------------------------------
+    string footerAddress = configPage.FooterAddress;
+    string footerEmail = configPage.FooterEmail;
+    string footerTelephone = configPage.FooterTelephone;
+
+  
+
+}
+
+<!-- FOOTER -->
+<footer class="footer pt-80">
+    <div class="container">
+        <div class="row mb-60">
+            <!-- Logo -->
+            <div class="col-md-3 col-sm-3 col-xs-12 mb-xs-30">
+                @if (!string.IsNullOrEmpty(footerImageLink))
+                {
+                    <a class="footer-logo" target="@footerImageLinkNewWindow" href="@footerImageLink">
+                        <img src="@footerImage" />
+                    </a>
+                }
+                else
+                {
+                    <img src="@footerImage" />
+                }
+            </div>
+            <!-- Logo -->
+            <!-- Newsletter -->
+            @{
+                //-------------------------------------------------------------------
+                //Mailchimp info
+                //-------------------------------------------------------------------
+                string apiKey = (string.IsNullOrEmpty(configPage.MailChimpApikey)) ? System.Configuration.ConfigurationManager.AppSettings.Get("MailChimpApiKey") : configPage.MailChimpApikey;
+                string listId = configPage.MailChimpListID;
+
+            
+            if (!string.IsNullOrEmpty(apiKey))
+{
+            <div class="col-md-4 col-sm-5 col-xs-12 mb-xs-30">
+                <div class="newsletter">
+                    @Html.Partial("NewsletterForm", new DotSee.Models.NewsletterSubscription())
+                </div>
+            </div>
+            }
+}
+            <!-- End Newsletter -->
+            <!-- Social -->
+            <div class="col-md-3 col-md-offset-2 col-sm-4 col-xs-12">
+                <ul class="social">
+                    @{ 
+                        Dictionary<string,string> socials = new Dictionary<string,string>();
+                        socials.Add("facebook", configPage.SocialFacebook);
+                        socials.Add("twitter", configPage.SocialTwitter);
+                        socials.Add("instagram", configPage.SocialInstagram);
+                        socials.Add("youtube", configPage.SocialYoutube);
+                        socials.Add("vimeo-square", configPage.SocialVimeo);
+                        socials.Add("linkedin", configPage.SocialLinkedin);
+                        socials.Add("google-plus-square", configPage.SocialGoogleplus);
+                        socials.Add("flickr", configPage.SocialFlickr);
+                        socials.Add("tumblr", configPage.SocialTumblr);
+                        socials.Add("behance", configPage.SocialBehance);
+                    }
+                    @foreach (string s in socials.Keys)
+                    {
+                        @RenderSocialLink(s, socials[s])
+                    }
+                    
+                </ul>
+            </div>
+            <!-- End Social -->
+        </div>
+        <!--Footer Info -->
+
+        <div class="row footer-info mb-60">
+            <div class="col-md-3 col-sm-12 col-xs-12 mb-sm-30">
+                @if (!string.IsNullOrEmpty(footerText))
+                {
+                <p class="mb-xs-0">@Html.Raw(umbraco.library.ReplaceLineBreaks(footerText))</p>
+                }
+                @if (!string.IsNullOrEmpty(footerLink)) { 
+                <a class="btn-link-a" target="@footerLinkTarget" href="@footerLink">@footerLinkText</a>
+                }
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 mb-sm-30 mb-xs-0">
+                @if (footerPageLinksColumn1.Count() > 0)
+                {
+                <ul class="link">
+                    @foreach (IPublishedContent item in footerPageLinksColumn1) {
+                    <li><a href="@Umbraco.Url(item.Id)">@item.GetPageTitleForMenu()</a></li>
+                    }
+                </ul>
+                }
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 mb-sm-30">
+                @if (footerPageLinksColumn2.Count() > 0)
+                {
+                <ul class="link">
+                    @foreach (IPublishedContent item in footerPageLinksColumn2)
+                    {
+                        <li><a href="@Umbraco.Url(item.Id)">@item.GetPageTitleForMenu()</a></li>
+                    }
+                </ul>
+                }
+            </div>
+            <div class="col-md-3 col-sm-12 col-xs-12">
+                @if (!string.IsNullOrEmpty(footerAddress)) {
+                <p>@Html.Raw(umbraco.library.ReplaceLineBreaks(footerAddress))</p>
+                }
+                @if (!string.IsNullOrEmpty(footerEmail) || !string.IsNullOrEmpty(footerTelephone))
+                {
+                <ul class="link-small">
+                    @if (!string.IsNullOrEmpty(footerEmail)) {
+                    <li><a href="mailto:@footerEmail"><i class="fa fa-envelope-o left"></i>@footerEmail</a></li>
+                    }
+                    @if (!string.IsNullOrEmpty(footerTelephone)) {
+                    <li><a><i class="fa fa-phone left"></i>@footerTelephone</a></li>
+                    }
+                </ul>
+                }
+            </div>
+        </div>
+        <!-- End Footer Info -->
+    </div>
+
+    <hr />
+
+    <!-- Copyright Bar -->
+    <section class="copyright ptb-15">
+        <div class="container">
+            <p class="copyright">
+                @Html.Raw(umbraco.library.RemoveFirstParagraphTag(configPage.FooterCopyrightText.ToString()))
+            </p>
+        </div>
+    </section>
+    <!-- End Copyright Bar -->
+
+</footer>
+<!-- END FOOTER -->
+
+@helper RenderSocialLink (string service, string link) {
+if (string.IsNullOrEmpty(link)) { return; }
+if (!link.StartsWith("http")) { link = "https://" + link; }
+
+    <li><a target="_blank" href="@link"><i class="fa fa-@service"></i></a></li>
+}

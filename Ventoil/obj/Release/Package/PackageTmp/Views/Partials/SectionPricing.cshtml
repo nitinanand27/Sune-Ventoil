@@ -1,0 +1,84 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionPricing>
+
+@using HtmlAgilityPack;
+@using DotSee.UmbracoExtensions;
+
+@{
+   SectionPricing currSection = Model;
+}
+
+	<!-- Pricing Section -->
+        <section id="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() ptb-60 ptb-sm-60">
+            <div class="container text-center">
+                <h3>@currSection.Name</h3>
+                <div class="spacer-60"></div>
+                <div class="row">
+
+@{  
+    //Adjust the boostrap column span based on number of items. 
+    //Up to 4 items are supported.  
+    int childrenCount = currSection.Children().Count();
+    if (childrenCount > 4) { childrenCount = 4; }
+    var bootstrapCols = 12 / childrenCount;
+
+foreach (DPricingItem item in currSection.Children<DPricingItem>())
+{
+
+    //Create a list of <li>s from <p> nodes in the description.
+    string description = item.Description.ToString();
+    HtmlDocument d = new HtmlDocument();
+    d.LoadHtml(description);
+    HtmlNodeCollection ncol = d.DocumentNode.SelectNodes("//p");
+    System.Text.StringBuilder sb = new System.Text.StringBuilder(string.Empty);
+
+    
+    foreach (HtmlNode n in ncol.Nodes())
+    {
+        sb.Append("<li>" + n.OuterHtml + "</li>");
+    }
+    
+    //Get the link
+    LinkItem link = item.GetLink();
+
+    string pricingBoxClass = "Pricing-box";
+    if (item.Highlight)
+    {
+        pricingBoxClass += " highlight";
+    }
+                        <div class="col-md-@bootstrapCols mb-30">
+                        <div class="@pricingBoxClass">
+                            <div class="price-title spacing-box">
+                                <h4>@item.Name</h4>
+                            </div>
+                            <hr />
+                            <div class="spacing-box">
+                                <div class="price"><span class="price-sm">@item.Currency</span><span class="price-lg">@item.Price</span></div>
+                                <div class="price-tenure" style="margin-top:8px;">@item.Period</div>
+                            </div>
+                            <hr />
+                            <div class="pricing-features spacing-grid">
+                                <ul>
+                                    @Html.Raw(sb.ToString())
+                                </ul>
+                            </div>
+                            <hr />
+                            <div class="spacing-grid">
+                                @if (string.IsNullOrEmpty(link.Url)) {
+                                    @item.ButtonText 
+                                }
+                                else
+                                {
+                                    <a class="btn btn-md btn-black" href="@link.Url" target="@link.Target">@item.ButtonText</a>
+                                }
+                                
+                            </div>
+                        </div>
+                    </div>
+
+}
+}    
+   
+                </div>
+            </div>
+        </section>
+        <!-- End Pricing Section -->

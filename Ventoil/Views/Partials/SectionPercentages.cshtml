@@ -1,0 +1,40 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionPercentages>
+
+@using DotSee.UmbracoExtensions;
+
+@{
+    SectionPercentages currSection = Model;
+    bool isPartOfMultiCol = currSection.Parent.DocumentTypeAlias == SectionMultiCol.ModelTypeAlias;
+    string multiColCss = (isPartOfMultiCol) ? ViewData["multiColCss"].ToString() : "col-md-6 col-md-offset-3";
+}
+<section class="@currSection.GetSectionEffectCssClass() ptb-60 ptb-sm-60">
+    <div class="container">
+        <div class="container">
+            @if (!currSection.HideTitle)
+            {
+                if (isPartOfMultiCol)
+                {
+                    <h4>@currSection.Name</h4>
+                }
+                else
+                {
+                    <h3 class="text-center">@currSection.Name</h3>
+                }
+                <div class="spacer-15"></div>
+            }
+            
+            <div class="row">
+                <div class="@multiColCss">
+                    @foreach (DPercentagesItem item in currSection.Children<DPercentagesItem>())
+                    {
+                        <div class="skillbar" data-percent="@item.Percentage%">
+                            <div class="skillbar-title">@item.Name</div>
+                            <div class="skill-bar-percent">@item.Percentage%</div>
+                            <div class="skillbar-bar"></div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+</section>
+

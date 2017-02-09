@@ -1,0 +1,112 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionPortfolio>
+
+@using DotSee.UmbracoExtensions;
+@using DotSee.Portfolio;
+
+@{
+    SectionPortfolio currSection = Model;
+
+    PortfolioHelper portfolioHelper = PortfolioHelperMaker.GetCachedPortfolioHelper(ApplicationContext, currSection);
+
+    string containerTypeClass = (portfolioHelper.Masonry) ? "masonry" : "grid";
+    string spacingClass = (portfolioHelper.Spacing) ? "spacing" : "";
+    string itemClass = (portfolioHelper.Spacing) ? "container-" + containerTypeClass + " nf-col-" + portfolioHelper.NoOfCols : "row container-" + containerTypeClass + " nf-col-" + portfolioHelper.NoOfCols;
+    string containerClass = (portfolioHelper.Wide) ? "container-fluid" : "container";
+    int cropwidth = (portfolioHelper.Wide)
+        ? (portfolioHelper.Spacing) ? 877 : 952
+        : (portfolioHelper.Spacing)? 650: 600;
+
+}
+
+<section id="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() ptb-60 ptb-sm-60 text-center">
+    <div class="@containerClass">
+        <h3>@currSection.Name</h3>
+        <div class="spacer-30"></div>
+        @if (portfolioHelper.HasCategories)
+        {
+        <div class="row">
+            <ul class="container-filter categories-filter">
+                @if (!currSection.HideAllCategoryOption)
+                {
+                    string allCatsLabel = currSection.AllOptionLabel;
+                    if (currSection.ShowItemCount) {
+                        allCatsLabel += string.Format(" ({0})", portfolioHelper.GetTotalCount().ToString());
+                    }
+                <li><a class="categories active" data-filter="*">@allCatsLabel</a></li>
+                }
+
+                @foreach (DGenericCategoryItem c in portfolioHelper.GetCategories())
+                {
+                    string filter = c.Id.ToString();
+                    string name = c.Name;
+                    if (currSection.ShowItemCount) {
+                        name += string.Format(" ({0})", portfolioHelper.GetCountPerCategory(c).ToString());
+                    }
+                    <li><a class="categories" data-filter=".@filter">@name</a></li>
+                }
+            </ul>
+        </div>
+        }
+        
+ 
+        <div class="@itemClass">
+
+            @foreach (PagePortfolioItem item in portfolioHelper.GetPortfolioItems())
+            {
+                bool hideCategories = item.DoNotDisplayCategories;
+                bool hideDates = item.DoNotDisplayReleaseDate;
+
+                //Get the category names as a comma delimited list for display
+                string categoryNames = item.GetPortfolioCategoryNames();
+
+                //Get the ids and drop commas - those will be in the class attribute for script to work
+                string itemCategories = item.Categories;
+                string itemCategoriesNoCommas = itemCategories.Replace(" ", "").Replace(",", " ");
+
+                string imageThumb = "";
+                string imageFull = "";
+                //string imageTitle;
+                int counter = 0;
+
+                //TODO: Get image from media and image cropped correctly
+                IPublishedContent mediaItem = item.GetPortfolioListImage();
+
+
+                if (mediaItem == null)
+                {
+                    imageThumb = "/img/noimage/gallery_noimage.png";
+
+                }
+                else
+                {
+                    imageThumb = (currSection.Masonry) ? mediaItem.GetCropUrl(width: 800, imageCropMode: global::Umbraco.Web.Models.ImageCropMode.Max) : mediaItem.GetCropUrl(cropwidth, 350);
+                }
+
+                counter++;
+
+                <div class="nf-item @itemCategoriesNoCommas @spacingClass">
+                    <div class="item-box">
+                        <a href="@item.Url" title="@item.GetPageTitleForMenu()">
+                            <img class="item-container" src="@imageThumb" alt="@counter" />
+                            <div class="item-mask">
+                                <div class="item-caption">
+                                    <h5 class="white">@item.GetPageTitleForMenu()</h5>
+
+                                    @if (!currSection.DoNotDisplayCategories && !hideCategories)
+                                    {
+                                        <p class="white">@categoryNames</p>
+                                    }
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+ 
+</section>
+
+

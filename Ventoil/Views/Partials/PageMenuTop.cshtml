@@ -1,0 +1,81 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage
+@using DotSee.UmbracoExtensions;
+@using DotSee;
+@{
+    //It's ugly, I know.
+    //I should at least have used recursion, I know.
+    //Please be gentle. I'm sensitive. :)
+
+    IPublishedContent currPage = Model;
+    Pagehome homePage = (Pagehome)currPage.AncestorOrSelf(1);
+    ConfigGlobalSettings configPage = homePage.Descendant<ConfigGlobalSettings>();
+
+    bool autoGenerate = configPage.GenerateAutomatically;
+}
+                <nav class="navigation">
+                    <ul>
+                        
+                        @if (autoGenerate && homePage.IsVisible())
+                        //Check if a link to the home page should appear on the menu
+                        {
+                            <li>
+                                <a href="@homePage.Url">@homePage.GetPageTitleForMenu()</a>
+                            </li>
+                        }
+                        
+                        @{ 
+                            IEnumerable<IPublishedContent> menuPagesFirstLevel = 
+                                (autoGenerate) ? homePage.GetChildPages(includeWithPrefix: "page") : configPage.GetPickerItemsByValue(configPage.MenuItems);
+                        }
+
+                        @foreach (IPublishedContent item in menuPagesFirstLevel)
+                        {
+                            if (item==null) { continue; }
+                            //LEVEL 1
+                            //All doctypes starting with "page" are considered pages eligible for navigation
+                            bool hasChildren = item.DocumentTypeAlias.Equals(Pagehome.ModelTypeAlias) ? false : item.HasChildren();
+
+                            MvcHtmlString activeCssClass = (currPage.IsInPath(item)) ? Html.Attr("class", "active") : MvcHtmlString.Empty;
+
+                            <li @activeCssClass>
+                                <a href="@item.Url">@item.GetPageTitleForMenu()</a>
+
+                                @if (hasChildren) 
+                                {
+                                    <ul class="nav-dropdown">
+
+                                        @foreach (IPublishedContent subItem in item.GetChildPages())
+                                        {
+                                            //LEVEL 2
+                                            bool subHasChildren = subItem.HasChildren();
+                                            bool isActive = (currPage.IsInPath(subItem));
+                                            string cssClassSecondLevel = string.Concat((subHasChildren) ? "nav-has-sub" : "", (isActive) ? " active" : "");
+
+                                            MvcHtmlString listCssClass = (!string.IsNullOrEmpty(cssClassSecondLevel)) ? Html.Attr("class", cssClassSecondLevel) : MvcHtmlString.Empty;
+
+                                            <li @listCssClass>
+                                                <a href="@subItem.Url">@subItem.GetPageTitleForMenu()</a>
+                                                
+                                                @if (subHasChildren) 
+                                                {
+                                                    <ul class="nav-sub-dropdown">
+                                                        @foreach (IPublishedContent subItem2 in subItem.GetChildPages())
+                                                        {
+                                                            MvcHtmlString activeCssClassThirdLevel = (currPage.IsInPath(subItem2)) ? Html.Attr("class", "active") : MvcHtmlString.Empty;
+                                                            //LEVEL 3
+                                                            <li @activeCssClassThirdLevel>
+                                                                <a href="@subItem2.Url">@subItem2.GetPageTitleForMenu()</a>
+                                                            </li>
+                                                        }
+
+                                                    </ul>
+                                                }
+                                            </li>
+                                          }
+                                      </ul>
+                                 }
+                                 </li>
+                                                }
+                    </ul>
+                </nav>
+             

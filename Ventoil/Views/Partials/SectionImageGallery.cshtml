@@ -1,0 +1,163 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionImageGallery>
+
+@using DotSee.UmbracoExtensions;
+@using System.Text;
+@using DotSee.PropSense;
+
+@{
+    //Standard references
+    SectionImageGallery currSection = Model;
+
+    //Hide "All option and filter by first category
+    bool globalHideAllCategoryOption = currSection.HideAllCategoryOption;
+
+    //See if there are any categories defined at all
+    bool mustShowCategories = !currSection.DoNotDisplayCategories && currSection.Descendant<FolderGenericCategories>().HasChildren<DGenericCategoryItem>();
+
+    //Get "All" option label
+    string allCategoryOption = string.IsNullOrEmpty(currSection.AllOptionLabel)? Umbraco.GetDictionaryValue("Theme.Gallery.All").ToString(): currSection.AllOptionLabel;
+
+    IEnumerable<DGenericCategoryItem> categories = null;
+
+    if (mustShowCategories)
+    {
+        //Get the list of items
+        IEnumerable<DImageGalleryItem> itemsToCheck = currSection.Descendant<FolderImageGalleryImages>().Children<DImageGalleryItem>();
+
+        //Check if category is contained in at least one portfolio item's picker. If not, don't add to list since it's an empty category.
+        categories = currSection
+            .Descendant<FolderGenericCategories>()
+            .Children<DGenericCategoryItem>()
+            .Where(x => x.IsContainedInAnyPicker(itemsToCheck, Psn_dImageGalleryItem.categories));
+    }
+
+    //Get number of columns
+    var noOfCols = (currSection.Columns>0) ? currSection.Columns : 2;
+
+    //Decide if masonry or grid
+    bool masonry = currSection.Masonry;
+    string containerTypeClass = (masonry) ? "masonry" : "grid";
+
+    //Get spacing
+    bool spacing = currSection.Spacing;
+    string spacingClass = (spacing) ? "spacing" : "";
+
+    //Construct class
+    string itemClass = (spacing) ? string.Format("container-{0} nf-col-{1}", containerTypeClass, noOfCols) : string.Format ("row container-{0} nf-col-{1}", containerTypeClass, noOfCols);
+
+    //Get image upscaling
+    bool upscaleImages = currSection.UpscaleImages;
+}
+ 
+<section id="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() ptb-60 pt-sm-80 text-center">
+
+    <div class="container">
+            
+        <h3>@currSection.Name</h3>
+        <div class="spacer-30"></div>
+                
+        @*
+            -----------------------------------------------------------------
+            Category filter on top
+            -----------------------------------------------------------------
+        *@
+        @if (mustShowCategories)
+        {
+        <div class="row">
+            <ul class="container-filter categories-filter">
+                @if (!globalHideAllCategoryOption)
+                {
+                <li><a class="categories active" data-filter="*">@allCategoryOption</a></li>
+                }
+                @foreach (DGenericCategoryItem c in categories)
+                {
+                    string filter = c.Id.ToString();
+                    <li><a class="categories" data-filter=".@filter">@c.Name</a></li>
+                }
+            </ul>
+        </div>
+        }
+        @* End category filter on top *@
+
+        @*
+            -----------------------------------------------------------------
+            Gallery
+            -----------------------------------------------------------------
+        *@
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="@itemClass">
+
+                    @foreach (DImageGalleryItem item in currSection.Descendants<DImageGalleryItem>())
+                    {
+
+                        string categoryNames = "";
+                        string itemCategoriesNoCommas = "";
+
+                        if (mustShowCategories) {
+
+                            //Build the comma delimited list of category names
+                            StringBuilder sb = new StringBuilder(string.Empty);
+
+                            foreach (DGenericCategoryItem category in item.GetPickerItemsByValue(item.Categories).OrderBy(x=>x.Name))
+                            {
+                                sb.Append(category.Name);
+                                sb.Append(", ");
+                            }
+
+                            if (!sb.ToString().Equals(string.Empty))
+                            {
+                                categoryNames = sb.ToString().Substring(0, (sb.ToString().Length - 2));
+
+                                itemCategoriesNoCommas = item.Categories.Replace(" ", "").Replace(",", " ");
+                            }
+
+                        }
+
+                        string imageThumb = "";
+                        string imageFull = "";
+
+                        //Counter will be used in alt attribute
+                        int counter = 0;
+
+                        //TODO: Get image from media and image cropped correctly
+
+                        IPublishedContent mediaItem = Umbraco.TypedMedia(item.ImageFromMedia);
+
+                        imageThumb = (masonry) ? mediaItem.GetCropUrl() : mediaItem.GetCropUrl(600, 350);
+                        imageFull = mediaItem.GetCropUrl(width: 1280, height: 1024, imageCropMode: global::Umbraco.Web.Models.ImageCropMode.Max, upScale: upscaleImages);
+
+                        if (!string.IsNullOrEmpty(item.ImageFromMedia)) // || item.HasValue("imageCropped"))
+                        {
+                            counter++;
+
+                            <div class="nf-item @itemCategoriesNoCommas @spacingClass">
+                                <div class="item-box">
+                                    <a class="cbox-gallary1" href="@imageFull" title="@item.Name">
+                                        <img class="item-container" src="@imageThumb" alt="@counter" />
+                                        <div class="item-mask">
+                                            <div class="item-caption">
+                                                <h5 class="white">@item.Name</h5>
+                                                @if (mustShowCategories)
+                                                {
+                                                <p class="white">@categoryNames</p>
+                                                }
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+
+                    }
+
+                </div>
+            </div>
+        </div>
+        @* End Gallery *@
+    </div>
+</section>
+        
+
+

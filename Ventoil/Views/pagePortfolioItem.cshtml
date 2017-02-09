@@ -1,0 +1,353 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<PagePortfolioItem>
+@using DotSee.UmbracoExtensions;
+@using DotSee.Portfolio;
+@using DotSee.PropSense;
+
+@{
+    Layout = "siteTemplate.cshtml";
+    PagePortfolioItem currPage = Model.Content;
+    SectionPortfolio portfolioRoot = Model.Content.Ancestor<SectionPortfolio>();
+
+    PortfolioHelper h = new PortfolioHelper(portfolioRoot);
+
+    //bool globalHideCategories = h.GlobalHideCategories;
+    //bool globalHideDates = h.GlobalHideDates;
+    //bool hideCategories = currPage.DoNotDisplayCategories;
+    bool hideDates = currPage.DoNotDisplayReleaseDate; 
+    string dateFormat = h.GlobalDateFormat;
+}
+
+@{
+    if (portfolioRoot.InheritBackgroundImage)
+    {
+        @Html.Partial("PageBackgroundImage", portfolioRoot.Ancestor<PageContent>(), new ViewDataDictionary{ {"currPage", currPage} })
+    }
+}
+<section class="pt pt-sm-80">
+    <div class="container">
+
+      
+        @if (currPage.ShowVisitSiteButton && !string.IsNullOrEmpty(currPage.GetLink().Url)) {
+            @ShowProjectInfoWithLink(currPage)
+        }
+        else
+        {
+            @ShowProjectInfo(currPage)
+        }
+
+
+        @if (!string.IsNullOrEmpty(currPage.VideoUrl))
+        {
+
+            string videoUrl = currPage.VideoUrl;
+
+            if (videoUrl.ToLower().Contains("youtube.com"))
+            {
+                @ShowYouTubeVideo(currPage)
+            }
+
+            else if (videoUrl.ToLower().Contains("vimeo.com"))
+            {
+
+                @ShowVimeoVideo(currPage)
+            }
+        }
+
+        @if (!string.IsNullOrEmpty(currPage.ImageGallery))
+        {
+            bool isSingleImage = currPage.ImageGallery.Split(',').Count() == 1;
+            if (isSingleImage)
+            {
+                @ShowTopImageSingle(currPage)
+            }
+            else
+            {
+                if (currPage.ShowImagesAsList)
+                {
+                    @ShowTopImageList(currPage)
+                }
+                else
+                {
+                    @ShowTopImageSlider(currPage)
+                }
+            }
+        }
+
+        <div class="row mtb-60 mtb-xs-30">
+            <div class="col-md-4 mb-30">
+                <div class="project-detail-block">
+                    @if (!string.IsNullOrEmpty(currPage.Categories) && (!portfolioRoot.DoNotDisplayCategories && !currPage.DoNotDisplayCategories))
+                    {
+                        <p>
+                            <strong class="dark-color">@Umbraco.GetDictionaryValue("Portfolio.Categories") :</strong>@currPage.GetPickerItemsAsCsv(Psn_pagePortfolioItem.categories)
+                        </p>
+                    }
+
+                    @if (currPage.ReleaseDate!=null && (!portfolioRoot.DoNotDisplayReleaseDate && !currPage.DoNotDisplayReleaseDate))
+                    {
+                        <p>
+                            <strong class="dark-color">@Umbraco.GetDictionaryValue("Portfolio.Released") :</strong>@currPage.RenderDateLiteral(currPage.ReleaseDate, dateFormat)
+                        </p>
+                    }
+
+                    @{ LinkItem link = currPage.GetLink();
+                        if (!string.IsNullOrEmpty(link.Url))
+                        {
+                            <p>
+                                <strong class="dark-color">@Umbraco.GetDictionaryValue("Portfolio.Link") :</strong><a href="@link.Url" target="@link.Target">@link.UrlNoHttp</a>
+                            </p>
+                        }
+                    }
+
+                    @if (!string.IsNullOrEmpty(currPage.Client))
+                    {
+                        <p>
+                            <strong class="dark-color">@Umbraco.GetDictionaryValue("Portfolio.Client") :</strong>@currPage.Client
+                        </p>
+                    }
+
+                    @if (!string.IsNullOrEmpty(currPage.CustomFields))
+                    {
+                        
+                        string[] lines = currPage.CustomFields.Split(new string[] { "\n", "\n\r" }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (string lineItem in lines)
+                        {
+                            if (!lineItem.Contains(":")) { continue; }
+                            string[] nameValue = lineItem.Split(':');
+
+                            <p>
+                                <strong class="dark-color">@nameValue[0].Trim() :</strong>@nameValue[1].Trim()
+                            </p>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="col-md-8">
+                @Html.Raw(currPage.Content)
+            </div>
+        </div>
+    </div>
+
+</section>
+
+@if (currPage.Descendant(FolderPortfolioSections.ModelTypeAlias) != null)
+{
+    var items = currPage.Descendant(FolderPortfolioSections.ModelTypeAlias).Children();
+
+    foreach (IPublishedContent item in items)
+    {
+        bool useHorizontalRule = (item.Equals(items.Last())) ? false : true;
+
+        @Html.Partial("PageSectionRenderer", item, new ViewDataDictionary { { "useHorizontalRule", useHorizontalRule } })
+
+    }
+}
+
+@RelatedItems(currPage, portfolioRoot)
+
+@NextPrev(currPage, portfolioRoot)
+
+@helper ShowProjectInfo(PagePortfolioItem currPage) {
+
+    <div class="row mb-60 mb-xs-30">
+        <div class="col-md-6">
+            <h4>@currPage.GetPageTitleInternal()</h4>
+        </div>
+        <div class="col-md-6">
+            <p class="lead">
+                @Html.Raw(currPage.Summary)
+            </p>
+        </div>
+    </div>
+}
+
+@helper ShowProjectInfoWithLink(PagePortfolioItem currPage)
+{
+
+LinkItem link = currPage.GetLink();
+string buttonCaption = (!string.IsNullOrEmpty(currPage.CustomVisitSiteButtonCaption)) ? currPage.CustomVisitSiteButtonCaption : Umbraco.GetDictionaryValue("Portfolio.VisitSite");
+
+        <div class="row mb-60 mb-xs-30">
+            <div class="col-md-8">
+                <h4>@currPage.GetPageTitleInternal()</h4>
+                <p class="mt-15">
+                    @Html.Raw(currPage.Summary)
+                </p>
+            </div>
+            <div class="col-md-4 mb-30">
+                <a href="@link.Url" target="@link.Target" class="btn btn-lg btn-black float-right float-none-sm"><i class="fa fa-link left"></i>@buttonCaption</a>
+
+            </div>
+
+        </div>
+}
+
+@helper ShowYouTubeVideo(PagePortfolioItem currPage)
+{
+
+string videoId = currPage.VideoUrl.Split('/').Last().Replace("watch?v=", "");
+
+    <div class="row">
+        <div class="col-md-12 post-media">
+            <iframe width="" height="" src="https://www.youtube.com/embed/@videoId" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+}
+
+@helper ShowVimeoVideo(PagePortfolioItem currPage)
+{
+
+string videoId = currPage.VideoUrl.Split('/').Last();
+
+    <div class="row">
+        <div class="col-md-12 post-media">
+            <iframe width="" height="" frameborder="0" allowfullscreen="" src="http://player.vimeo.com/video/@videoId?title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff"></iframe>
+        </div>
+
+    </div>
+}
+
+@helper ShowTopImageSlider(PagePortfolioItem currPage)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="owl-carousel image-slider o-flow-hidden">
+                @foreach (IPublishedContent image in currPage.GetPickerMediaByValue(currPage.ImageGallery))
+                {
+                    string fullImageUrl = image.GetCropUrl(width: 1150, height: 766, upScale: true);
+                    <div class="item">
+                        <img src="@fullImageUrl" alt="@currPage.GetPageTitleInternal()">
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+}
+
+@helper ShowTopImageList(PagePortfolioItem currPage)
+{
+
+int skip = 0;
+    
+        if (!currPage.DoNotShowLargeFirstImage)
+        {
+
+            skip = 1;
+            string fullFirstImageUrl = currPage.GetPickerMediaByValue(currPage.ImageGallery).First().GetCropUrl(width: 1150, height: 766, upScale: true);
+
+            <div class="row">
+                <div class="col-md-12 nf-item spacing-grid">
+                    <img class="item-container" src="@fullFirstImageUrl" alt="@currPage.GetPageTitleInternal()">
+                </div>
+                </div>
+                }
+                <div class="row container-masonry nf-col-2">
+                    @foreach (IPublishedContent image in currPage.GetPickerMediaByValue(currPage.ImageGallery).Skip(skip))
+        {
+            string fullImageUrl = image.GetCropUrl(width: 550, upScale: true);
+
+                        <div class="col-md-6 col-sm-6 col-xs-12 nf-item spacing-grid">
+                            <img class="item-container" src="@fullImageUrl" alt="@currPage.GetPageTitleInternal()">
+                        </div>
+                    }
+                </div>
+                }
+
+
+                @helper ShowTopImageSingle(PagePortfolioItem currPage)
+                {
+
+string fullImageUrl = currPage.GetPickerMediaByAlias(Psn_pagePortfolioItem.imageGallery).First().GetCropUrl(width: 1150, height: 766, upScale: true);
+    <div class="row">
+        <div class="col-md-12">
+            <img class="item-container" src="@fullImageUrl" alt="@currPage.GetPageTitleInternal()">
+        </div>
+    </div>
+}
+
+@helper RelatedItems(PagePortfolioItem currPage, SectionPortfolio portfolioRoot )
+{
+
+if (!currPage.MustShowRelated()) { return; }
+
+    <section class="ptb ptb-sm-60">
+        <div class="container text-center">
+            @if (!string.IsNullOrEmpty(portfolioRoot.RelatedTitle))
+            {
+                <h4>@portfolioRoot.RelatedTitle</h4>
+            }
+            <div class="row">
+                @foreach (PagePortfolioItem item in currPage.GetRelatedItems())
+                {
+                    //TODO: Ensure placeholder image if null (don't continue)
+                    IPublishedContent image = item.GetPortfolioListImage();
+                    if (image == null) { continue; }
+                    string imageThumb = image.GetCropUrl(height: 614, width: 920, upScale: true);
+
+                    //Get the category names as a comma delimited list for display
+                    string categoryNames = item.GetPortfolioCategoryNames();
+
+                    <div class="col-lg-4 spacing-grid">
+                        <div class="item-box">
+                            <a href="@item.Url">
+                                <img alt="1" src="@imageThumb" class="item-container">
+                                <div class="item-mask">
+                                    <div class="item-caption">
+                                        <h5 class="white">@item.GetPageTitleForMenu()</h5>
+                                        <p class="white">@categoryNames</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+@helper NextPrev(PagePortfolioItem currPage, SectionPortfolio portfolioRoot)
+{
+
+if (portfolioRoot.HideNextPrevious) { return; }
+
+List<PagePortfolioItem> prevNext = currPage.GetPrevNext();
+PagePortfolioItem prevItem = (PagePortfolioItem)prevNext[0];
+PagePortfolioItem nextItem = (PagePortfolioItem)prevNext[1];
+
+IPublishedContent parentPage = currPage.Ancestor(SectionPortfolio.ModelTypeAlias).Parent.Parent;
+
+if (prevItem != null || nextItem != null)
+{
+        <section class="mb-60">
+            <div class="container">
+                <div class="item-nav">
+                    @if (prevItem != null)
+                    {
+                        <a class="item-prev" href="@prevItem.Url">
+                            <div class="prev-btn"><i class="fa fa-angle-left"></i></div>
+                            <div class="item-prev-text xs-hidden">
+                                <h6>@prevItem.GetPageTitleForMenu()</h6>
+                            </div>
+                        </a>
+                    }
+                    <a class="item-all-view" href="@parentPage.Url">
+                        <h6>@Umbraco.GetDictionaryValue("Portfolio.AllWork")</h6>
+                    </a>
+                    @if (nextItem != null)
+                    {
+                        <a class="item-next" href="@nextItem.Url">
+                            <div class="next-btn"><i class="fa fa-angle-right"></i></div>
+                            <div class="item-next-text xs-hidden">
+                                <h6>@nextItem.GetPageTitleForMenu()</h6>
+                            </div>
+                        </a>
+                    }
+                </div>
+            </div>
+        </section>
+
+}
+
+}

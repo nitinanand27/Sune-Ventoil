@@ -1,0 +1,40 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage
+
+@using DotSee.PageMetas;
+@using DotSee.UmbracoExtensions;
+
+@{
+    IPublishedContent currPage = Model;
+
+    MetaSettings settings = (MetaSettings)ViewData["MetaSettings"];
+    string ogTitle = currPage.GetOpenGraphTitle(settings);
+    string ogDescription = currPage.GetOpenGraphDescription(settings);
+    string ogImage = currPage.GetOpenGraphImage(settings);
+    string ogType = currPage.GetOpenGraphType(settings);
+
+    <title>@currPage.GetPageBrowserTitle(settings)</title>
+    <meta name="title" content="@currPage.GetPageMetaTitle(settings)" />
+    <meta name="description" content="@currPage.GetPageMetaDescription(settings)" />
+    <meta name="keywords" content="@currPage.GetPageMetaKeywords()" />
+
+    if (!string.IsNullOrEmpty(ogTitle))
+    {
+        <meta property="og:title" content="@ogTitle" />
+    }
+
+    if (!string.IsNullOrEmpty(ogDescription))
+    {
+        <meta property="og:description" content="@ogDescription" />
+    }
+
+    if (!string.IsNullOrEmpty(ogImage))
+    {
+        <meta property="og:image" content="@ogImage" />
+    }
+
+    if (!string.IsNullOrEmpty(ogType))
+    {
+        <meta property="og:type" content="@ogType" />
+    }
+}
+

@@ -1,0 +1,35 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage
+
+@using DotSee.MazelBlog;
+@using DotSee.PropSense;
+@using DotSee.UmbracoExtensions;
+
+@{
+    IPublishedContent currPage = Model;
+    Pagehome homePage = (Pagehome)currPage.AncestorOrSelf(1);
+    PageBlogList blogRoot = (PageBlogList)currPage.AncestorOrSelf(Psn_pageBlogList.TypeName);
+
+    BlogHelper blogHelper = BlogHelperMaker.GetCachedBlogHelper(ApplicationContext, blogRoot);
+}
+
+@if (!blogHelper.GlobalCategoriesActive)
+{
+    return;
+}
+
+<div class="sidebar-widget">
+    <h5>@Umbraco.GetDictionaryValue("Blog.Categories")</h5>
+    <hr>
+    <ul>
+        @foreach (DGenericCategoryItem item in blogHelper.GetCategories())
+        {
+            string catCount = (blogHelper.ShowItemCount) ? string.Concat(" (", blogHelper.GetCountPerCategory(item).ToString(), ")") : "";
+            string catName = string.Concat(item.Name, catCount);
+            string link = string.Concat(blogRoot.Url, "?c=", item.Id.ToString());
+            <li><a href="@link">@catName</a></li>
+        
+              
+        }
+        
+    </ul>
+</div>

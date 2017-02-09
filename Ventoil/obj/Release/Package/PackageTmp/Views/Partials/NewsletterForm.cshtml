@@ -1,0 +1,49 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<NewsletterSubscription>
+
+@using DotSee.Models
+@using ClientDependency.Core.Mvc
+
+@{
+    Html.RequiresJs("/scripts/jquery.validate.min.js", 10000);
+    Html.RequiresJs("/scripts/jquery.validate.unobtrusive.min.js", 10000);
+    Html.RequiresJs("/scripts/jquery.unobtrusive-ajax.min.js", 10000);
+
+
+    string prompt = Umbraco.GetDictionaryValue("Newsletter.Message");
+    string errorMessage = Umbraco.GetDictionaryValue("Newsletter.GeneralError");
+    string thankYouMessage = Umbraco.GetDictionaryValue("Newsletter.SubmissionThankYou");
+    string submissionErrorMessage = Umbraco.GetDictionaryValue("Newsletter.SubmissionError");
+    string invalidEmailMessage = Umbraco.GetDictionaryValue("Newsletter.Email.Invalid");
+
+}
+
+<div class="text">
+    <div id="target">
+       
+        @using (Ajax.BeginForm("SendMail", "NewsletterSubscriptionSurface", new AjaxOptions
+        {
+            HttpMethod = "POST",
+            OnFailure = "ShowError",
+            OnSuccess = "ShowSuccess"
+        }))
+        {
+
+            @Html.TextBoxFor(x => x.EmailAddress, "email", new {@type = "email", @placeholder = prompt, @class = "newsletter-input input-md newsletter-input mb-0"})
+            @Html.ValidationMessageFor(x => x.EmailAddress, invalidEmailMessage)
+            @Html.HiddenFor(x=>x.PageId, new {Value = UmbracoContext.Current.PageId.ToString()})
+            <button class="newsletter-btn btn btn-xs btn-white" type="submit" value=""><i class="fa fa-angle-right mr-0"></i></button>
+        }
+                
+    </div>
+</div>
+
+<script type="text/javascript">
+    function ShowError() {
+        $("#target").html("@errorMessage");
+    }
+
+    function ShowSuccess(arg) {
+        if (arg.Success === true) { $("#target").html("@thankYouMessage"); }
+        else { $("#subscriptionMessage").html("@submissionErrorMessage"); }
+    }
+</script>

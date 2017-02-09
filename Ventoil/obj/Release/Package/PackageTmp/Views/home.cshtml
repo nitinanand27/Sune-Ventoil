@@ -1,0 +1,39 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<Pagehome>
+@{
+    Layout = "siteTemplate.cshtml";
+
+    Pagehome homePage = Model.Content;
+    int introType = (homePage.IntroType == null) ? -1 : (int)homePage.IntroType;
+    string introTypeStr = (introType == -1) ? "Static Image" : umbraco.library.GetPreValueAsString(introType);
+
+    switch (introTypeStr)
+    {
+        case "Image Slider":
+            @Html.CachedPartial("Intro_Slider", homePage, 300, true)
+            break;
+        case "Static Image":
+            @Html.CachedPartial("Intro_Static", homePage, 300, true)
+            break;
+        case "Youtube Video":
+            @Html.CachedPartial("Intro_Youtube", homePage, 300, true)
+            break;
+        case "Hero Image Slider":
+            @Html.CachedPartial("Intro_Hero", homePage, 300, true)
+            break;
+        default:
+            @Html.CachedPartial("Intro_Static", homePage, 300, true)
+            break;
+    }
+
+    if (homePage.Descendant<FolderSections>() != null)
+    {
+        var items = homePage.Descendant<FolderSections>().Children();
+        foreach (IPublishedContent item in items)
+        {
+
+
+            bool useHorizontalRule = (item.Equals(items.Last())) ? false : true;
+            @Html.Partial("PageSectionRenderer", item, new ViewDataDictionary { { "useHorizontalRule", useHorizontalRule } })
+        }
+    }
+}

@@ -1,0 +1,70 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionMultiCol>
+
+@using DotSee.UmbracoExtensions;
+
+@{
+    SectionMultiCol currSection = Model;
+
+    int childrenCount = currSection.Children().ToList().Count();
+
+    string cssClass = "";
+    switch (childrenCount)
+    {
+
+        case 1:
+            cssClass = "col-md-12";
+            break;
+        case 2:
+            cssClass = "col-md-6";
+            break;
+        case 3:
+            cssClass = "col-md-4";
+            break;
+        case 4:
+            cssClass = "col-md-3";
+            break;
+        default:
+            cssClass = "col-md-4";
+            break;
+    }
+
+}
+
+<section id="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() ptb-0 ptb-sm-0">
+    <div class="container">
+
+        <div class="row">
+
+            @{foreach (IPublishedContent widget in currSection.Children())
+                {
+                    switch (widget.DocumentTypeAlias)
+                    {
+                        case SectionPercentages.ModelTypeAlias:
+                            <div class="@cssClass">
+                                @Html.Partial("SectionPercentages", widget, new ViewDataDictionary { { "multiColCss", cssClass } })
+                            </div>
+                            break;
+                        case SectionText.ModelTypeAlias:
+                            <div class="@cssClass">
+                                @Html.Partial("SectionText", widget, new ViewDataDictionary { { "multiColCss", cssClass } })
+                            </div>
+                            break;
+                        case SectionAccordion.ModelTypeAlias:
+                            <div class="@cssClass">
+                                @Html.Partial("SectionAccordion", widget, new ViewDataDictionary { { "multiColCss", cssClass } })
+                            </div>
+                            break;
+                        case SectionFaq.ModelTypeAlias:
+                            <div class="@cssClass">
+                                @Html.Partial("SectionFaq", widget, new ViewDataDictionary { { "multiColCss", cssClass } })
+                            </div>
+                            break;
+                        default:
+                            <div class="@cssClass"></div>
+                            break;
+                    }
+                }
+            }
+        </div>
+    </div>
+</section>

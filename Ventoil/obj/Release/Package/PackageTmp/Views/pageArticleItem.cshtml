@@ -1,0 +1,151 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<PageArticleItem>
+@using DotSee.UmbracoExtensions;
+@using DotSee.MazelBlog;
+
+@{
+    Layout = "siteTemplate.cshtml";
+    PageArticleItem currPage = (PageArticleItem)Model.Content;
+    Pagehome homePage = (Pagehome)Model.Content.AncestorOrSelf(1);
+    PageBlogList blogRoot = currPage.Ancestor<PageBlogList>();
+    PageBlogAuthor author = (PageBlogAuthor)currPage.GetPickerItemsByValue(currPage.Author).FirstOrDefault();
+    string sectionCss = "ptb ptb-sm-60";
+}
+
+@{
+    if (blogRoot.PostsInheritBackgroundImage)
+    {
+        @Html.Partial("PageBackgroundImage", blogRoot, new ViewDataDictionary { { "currPage", currPage } })
+        sectionCss = "ptb-60 ptb-sm-60";
+    }
+}
+
+<section class="@sectionCss">
+    <div class="container">
+        <div class="row">
+            <!-- Post Bar -->
+            <div class="col-lg-9 col-md-9 blog-post-hr">
+    <div class="blog-post mb-30">
+        <div class="post-meta">
+
+        @if (author!=null) {
+        <span><a>@author.GetPageTitleForMenu()</a>,</span>
+        }
+
+        <span>@currPage.GetPostDate()</span></div>
+
+        <div class="post-header">
+            <h2>@currPage.GetPageTitleInternal()</h2>
+        </div>
+        @{
+            IPublishedContent image = currPage.GetPickerMediaByValue(currPage.Image).FirstOrDefault();
+            if (image != null)
+            {
+                string fullImageUrl = image.GetCropUrl(width: 850, upScale: true);
+                <div class="post-media">
+
+                    <img src="@fullImageUrl" alt="@currPage.GetPageTitleInternal()">
+                </div>
+            }
+        }
+
+        <div class="post-entry">
+            @currPage.Content
+        </div>
+
+        @if (currPage.HasValue("tags"))
+        {
+            <div class="post-tag pull-left">
+                @foreach (string tag in currPage.Tags.ToString().Split(','))
+                {
+                    string link = string.Concat(blogRoot.Url, "?t=", tag);
+                    <span><a href="@link">@tag</a></span>
+                }
+            </div>
+        }
+    </div>
+
+    @{
+        if (author != null)
+        {
+            IPublishedContent authorImage = author.GetPickerMediaByValue(author.AuthorImage).FirstOrDefault();
+            string authorImageUrl = (authorImage != null) ? authorImage.GetCropUrl(width: 80) : "/img/user-av.jpg";
+
+            <hr />
+            <div class="post-author">
+                <div class="post-author-img pull-left">
+                    <img alt="author" src="@authorImageUrl">
+                </div>
+                <div class="post-author-details pull-left">
+                    <h6>@author.GetPageTitleForMenu()</h6>
+                    <ul class="social">
+                        @{
+                            Dictionary<string, string> socials = new Dictionary<string, string>();
+                            socials.Add("socialFacebook", "facebook");
+                            socials.Add("socialTwitter", "twitter");
+                            socials.Add("socialInstagram", "instagram");
+                            socials.Add("socialYoutube", "youtube");
+                            socials.Add("socialVimeo", "vimeo-square");
+                            socials.Add("socialLinkedin", "linkedin");
+                            socials.Add("socialGoogleplus", "google-plus-square");
+                            socials.Add("socialFlickr", "flickr");
+                            socials.Add("socialTumblr", "tumblr");
+                            socials.Add("socialBehance", "behance");
+                        }
+                        @foreach (string s in socials.Keys)
+                        {
+                            @RenderSocialLink(author.GetPropertyValue<string>(s), socials[s])
+                        }
+                    </ul>
+                </div>
+            </div>
+           }
+    }
+
+    <hr />
+    <div class="clearfix"></div>
+
+    @{
+
+        string disqusShortName = blogRoot.DisqusShortName;
+        string disqusUrl = (!string.IsNullOrEmpty(disqusShortName)) ? string.Format("{0}.disqus.com", disqusShortName) : null;
+
+        if (!string.IsNullOrEmpty(disqusUrl))
+        {
+
+            <div id="disqus_thread"></div>
+                <script>
+
+                    var disqus_config = function () {
+                        this.page.url = "@currPage.UrlAbsolute()";
+                        this.page.identifier = "@currPage.Id.ToString()";
+                    };
+
+                    (function () { // DON'T EDIT BELOW THIS LINE
+                        var d = document, s = d.createElement('script');
+
+                        s.src = '//@disqusUrl/embed.js';
+
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        }
+    }
+    </div>
+            <div class="col-lg-3 col-md-3 mt-sm-30">
+                @Html.CachedPartial("BlogCategories", blogRoot, 3600, true, false, null)
+                @Html.CachedPartial("BlogRecentArticles", currPage, 3600, true, false, null)
+                @Html.CachedPartial("BlogPopularTags", blogRoot, 3600, true, false, null)
+            </div>
+        </div>
+    </div>
+</section>
+
+@helper RenderSocialLink(string link, string service)
+{
+if (string.IsNullOrEmpty(link)) { return; }
+if (!link.StartsWith("http")) { link = "https://" + link; }
+
+    <li><a target="_blank" href="@link"><i class="fa fa-@service"></i></a></li>
+}

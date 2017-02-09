@@ -1,0 +1,63 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Pagehome>
+
+@using DotSee.UmbracoExtensions;
+
+@{ 
+    Pagehome homePage = Model;
+
+    IEnumerable<DSliderImage> sliderImages = homePage.Descendant<FolderSliderImages>().Children<DSliderImage>();
+
+}
+	 <!-- Intro Section -->
+        <section class="home-slider">
+
+            <!-- Hero Slider Section -->
+            <div class="owl-carousel fullwidth-slider white o-flow-hidden">
+                
+                @{
+                    foreach (DSliderImage item in sliderImages)
+                    {
+                        Image img = (Image)Umbraco.TypedMedia(item.Image);
+                        string imgFile = (img == null) ? "/img/noimage.jpg?crop=0,0,1920,600" : img.GetCropUrl(imageCropMode: global::Umbraco.Web.Models.ImageCropMode.Max, upScale: true, width:1920, height:600);
+                        string title = string.IsNullOrEmpty(item.Title) ? homePage.IntroTitle : item.Title;
+                        string subtitle = string.IsNullOrEmpty(item.Subtitle) ? homePage.IntroSubtitle : item.Subtitle;
+
+                        string overlayCss = item.UseOverlay ?
+                             item.UseLightOverlay ? "overlay-light80" : "overlay-dark80"
+                             : "";
+                    
+                        string textCss = item.UseLightTextColor ? "light-color" : "dark-color";
+                        <div class="item bg-img parallax parallax-section1" style="background-image: url('@imgFile');">
+                            
+                            <div class="full-cap-wraper @overlayCss @textCss">
+                                <div class="content-caption @textCss">
+                                    <div class="container">
+                                        <h1>@title</h1>
+                                        <br />
+                                        <h5>@subtitle</h5>
+                                        <br>
+                                        <div>
+                                            @foreach (DLinkButton buttonItem in item.Descendants<DLinkButton>())
+                                            {
+                                                @RenderButton(buttonItem, item.UseLightTextColor)
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                      
+                        </div>
+                    }
+                }
+            </div>
+            
+        </section>
+        <div class="clearfix"></div>
+        
+@helper RenderButton(DLinkButton item, bool useLightColor)
+{
+LinkItem link = item.GetLink();
+
+string buttonCss = (useLightColor ? "btn-white" : "btn-black") + (item.FillButton ? "" : "-line");
+
+    <a href="@link.Url" target="@link.Target" class="btn btn-md @buttonCss">@item.Name</a>
+}

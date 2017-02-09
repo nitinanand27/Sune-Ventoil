@@ -1,0 +1,44 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage
+
+@using DotSee.UmbracoExtensions;
+@using DotSee.PropSense;
+@using DotSee.MazelBlog;
+
+
+@{
+    IPublishedContent currPage = Model;
+    Pagehome homePage = (Pagehome)currPage.AncestorOrSelf(1);
+    PageBlogList blogRoot = (PageBlogList)currPage.AncestorOrSelf(Psn_pageBlogList.TypeName);
+}
+
+@if (blogRoot.HideRecentArticles) { return; }
+
+<div class="sidebar-widget">
+    <h5>@Umbraco.GetDictionaryValue("Blog.RecentPosts")</h5>
+    <hr>
+    <ul class="widget-post">
+        @foreach (PageArticleItem item in blogRoot.Descendants(PageArticleItem.ModelTypeAlias)
+                    .OrderByDescending(x => ((PageArticleItem)x).PostDate)
+                    .Take((blogRoot.MaxRecentArticlesToShow == 0) ? 3 : blogRoot.MaxRecentArticlesToShow))
+        {
+            <li>
+                @{
+                    IPublishedContent thumb = item.GetPickerMediaByValue(item.Image).FirstOrDefault();
+                    if (thumb != null)
+                    {
+                        string fullImageUrl = thumb.GetCropUrl(width: 55, height: 45);
+                        <a class="widget-post-media">
+                            <img src="@fullImageUrl">
+                        </a>
+                    }
+                }
+
+                <div class="widget-post-info">
+                    <h6><a href="@item.Url">@item.GetPageTitleForMenu()</a></h6>
+                    <div class="post-meta"><span>@item.GetPostDate()</span></div>
+                </div>
+            </li>
+                    }
+
+    </ul>
+</div>

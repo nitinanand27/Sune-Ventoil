@@ -1,0 +1,54 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionAccordion>
+
+@using DotSee.UmbracoExtensions;
+
+@{
+
+    SectionAccordion currSection = Model;
+    bool isPartOfMultiCol = currSection.Parent.DocumentTypeAlias == SectionMultiCol.ModelTypeAlias;
+    string multiColCss = (isPartOfMultiCol) ? ViewData["multiColCss"].ToString() : "col-md-8 col-md-offset-2";
+
+}
+
+<!-- Accordian Section -->
+<section id="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() ptb-60 ptb-sm-60">
+    <div class="container">
+    @if (!currSection.HideTitle)
+    {
+        if (isPartOfMultiCol)
+        {
+            <div class="row">
+                <h4>@currSection.Name</h4>
+            </div>
+        }
+        else
+        {
+            <div class="row text-center">
+                <h3>@currSection.Name</h3>
+            </div>
+        }
+        <div class="spacer-15"></div>
+    }
+        
+        <div class="row">
+         
+            <div class="@multiColCss">
+                <div class="accordion">
+                    @foreach (DAccordionItem item in currSection.Children<DAccordionItem>())
+                    {
+                    <div class="accordion-section">
+                        <h6 class="accordion-title">@item.Name</h6>
+                        <div class="accordion-content">
+                            @Html.Raw(item.Content)
+                        </div>
+                    </div>
+                    }
+
+                </div>
+            </div>
+       
+        </div>
+    </div>
+
+</section>
+

@@ -1,0 +1,31 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage
+@using DotSee.PropSense;
+@using DotSee.UmbracoExtensions;
+@using Umbraco.ModelsBuilder;
+
+@{
+    IPublishedContent currPage = Model;
+    IPublishedContent homePage = currPage.AncestorOrSelf(1);
+    PageBlogList blogRoot = (PageBlogList)currPage.AncestorOrSelf(Psn_pageBlogList.TypeName);
+
+}
+
+@if (blogRoot.HideTags) { return; }
+
+<div class="sidebar-widget">
+    <h5>@Umbraco.GetDictionaryValue("Blog.PopularTags")</h5>
+    <hr>
+    <ul class="widget-tag">
+        @{ var allTags = Umbraco.TagQuery.GetAllContentTags("blogtags")
+                                       .Where(x => x.NodeCount > 0)
+                                       .Where(x => Umbraco.TagQuery.GetContentByTag(x.Text, "blogtags").Where(y => y.IsInPath(homePage)).Any())
+                                       .OrderByDescending(x => x.NodeCount).Take(blogRoot.GetPropertyValue<int>(Psn_pageBlogList.maxTagsToShow, 10));
+            foreach (var tag in allTags)
+            {
+                string link = string.Concat(blogRoot.Url, "?t=", tag.Text);
+                <li><a href="@link">@tag.Text</a></li>
+
+            }
+        }
+    </ul>
+</div>

@@ -1,0 +1,45 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionText>
+@using DotSee.UmbracoExtensions
+@{
+    SectionText currSection = Model;
+    string rowCssClass = (currSection.CenterTextAndTitle) ? "row text-center" : "row";
+    string multiColCss = (currSection.Parent.DocumentTypeAlias == SectionMultiCol.ModelTypeAlias) ? ViewData["multiColCss"].ToString() :
+        (currSection.WideText) ? "col-md-10 col-md-offset-1" : "col-md-8 col-md-offset-2";
+    string textCssClass = (currSection.LargerText) ? "lead" : null;
+}
+<section id="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() ptb-60 pt-sm-30 ptb-sm-60">
+    <div class="container">
+        <div class="@rowCssClass">
+            <div class="@multiColCss">
+                @if (!currSection.HideTitle)
+            {
+                switch ((int)currSection.TitleSize)
+                {
+                    case 1:
+                        <h6>@currSection.Name</h6>
+                        break;
+                    case 2:
+                        <h5>@currSection.Name</h5>
+                        break;
+                    case 3:
+                        <h4>@currSection.Name</h4>
+                        break;
+                    case 4:
+                        <h3>@currSection.Name</h3>
+                        break;
+                    case 5:
+                        <h2>@currSection.Name</h2>
+                        break;
+                    case 6:
+                        <h1>@currSection.Name</h1>
+                        break;
+                    }
+                }
+
+                <p class="@textCssClass">
+                    @Html.Raw(Model.TextContent.ToString().Replace("<p>", "").Replace("</p>", "<br/><br/>").TrimEnd("<br/>").TrimEnd("<br/>"))
+                </p>
+            </div>
+        </div>
+    </div>
+</section>

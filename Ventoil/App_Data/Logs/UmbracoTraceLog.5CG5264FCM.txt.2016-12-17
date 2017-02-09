@@ -1,0 +1,170 @@
+﻿ 2016-12-17 12:17:44,584 [P3544/D2/T1] INFO  Umbraco.Core.CoreBootManager - Umbraco 7.5.6 application starting on 5CG5264FCM
+ 2016-12-17 12:17:44,672 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Determining hash of code files on disk
+ 2016-12-17 12:17:44,703 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Hash determined (took 31ms)
+ 2016-12-17 12:17:44,811 [P3544/D2/T1] INFO  Umbraco.Core.MainDom - Acquiring MainDom...
+ 2016-12-17 12:17:44,817 [P3544/D2/T1] INFO  Umbraco.Core.MainDom - Acquired MainDom.
+ 2016-12-17 12:17:44,829 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of umbraco.interfaces.IApplicationStartupHandler
+ 2016-12-17 12:17:44,976 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of umbraco.interfaces.IApplicationStartupHandler, found 0 (took 147ms)
+ 2016-12-17 12:17:45,018 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter
+ 2016-12-17 12:17:45,021 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter, found 0 (took 3ms)
+ 2016-12-17 12:17:45,021 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyValueConverter
+ 2016-12-17 12:17:45,023 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyValueConverter, found 0 (took 1ms)
+ 2016-12-17 12:17:45,054 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Web.Mvc.SurfaceController
+ 2016-12-17 12:17:45,056 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Web.Mvc.SurfaceController, found 0 (took 1ms)
+ 2016-12-17 12:17:45,057 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Web.WebApi.UmbracoApiController
+ 2016-12-17 12:17:45,067 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Web.WebApi.UmbracoApiController, found 0 (took 10ms)
+ 2016-12-17 12:17:45,143 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Core.Media.IThumbnailProvider
+ 2016-12-17 12:17:45,145 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Core.Media.IThumbnailProvider, found 0 (took 1ms)
+ 2016-12-17 12:17:45,146 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Core.Media.IImageUrlProvider
+ 2016-12-17 12:17:45,147 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Core.Media.IImageUrlProvider, found 0 (took 1ms)
+ 2016-12-17 12:17:47,782 [P3544/D2/T1] INFO  Umbraco.Core.DatabaseContext - CanConnect = True
+ 2016-12-17 12:17:48,287 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Core.Models.PublishedContent.PublishedContentModel
+ 2016-12-17 12:17:48,297 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Core.Models.PublishedContent.PublishedContentModel, found 0 (took 10ms)
+ 2016-12-17 12:17:48,505 [P3544/D2/T1] INFO  Umbraco.Core.DatabaseContext - CanConnect = True
+ 2016-12-17 12:17:48,529 [P3544/D2/T1] INFO  Umbraco.Web.Cache.CacheRefresherEventHandler - Initializing Umbraco internal event handlers for cache refreshing
+ 2016-12-17 12:17:48,572 [P3544/D2/T1] INFO  Umbraco.Web.Search.ExamineEvents - Initializing Examine and binding to business logic events
+ 2016-12-17 12:17:48,608 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Core.Persistence.Mappers.BaseMapper
+ 2016-12-17 12:17:48,611 [P3544/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Core.Persistence.Mappers.BaseMapper, found 0 (took 2ms)
+ 2016-12-17 12:17:49,020 [P3544/D2/T1] INFO  Umbraco.Web.Search.ExamineEvents - Adding examine event handlers for index providers: 3
+ 2016-12-17 12:17:49,042 [P3544/D2/T1] INFO  DotSee.AutoNode - AutoNode: Loading configuration...
+ 2016-12-17 12:17:49,042 [P3544/D2/T1] INFO  DotSee.AutoNode - AutoNode: Loading configuration complete
+ 2016-12-17 12:17:49,105 [P3544/D2/T1] INFO  Umbraco.Core.DatabaseContext - CanConnect = True
+ 2016-12-17 12:17:49,209 [P3544/D2/T1] INFO  Umbraco.Core.CoreBootManager - Umbraco application startup complete (took 4792ms)
+ 2016-12-17 12:17:49,402 [P3544/D2/T8] INFO  Umbraco.Core.Sync.ApplicationUrlHelper - ApplicationUrl: http://localhost:62181/umbraco (UmbracoModule request)
+ 2016-12-17 12:17:50,187 [P3544/D2/T8] INFO  umbraco.content - Load Xml from file...
+ 2016-12-17 12:17:50,203 [P3544/D2/T8] INFO  umbraco.content - Loaded Xml from file.
+ 2016-12-17 12:17:51,905 [P3544/D2/T8] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Core.PropertyEditors.IParameterEditor
+ 2016-12-17 12:17:51,908 [P3544/D2/T8] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Core.PropertyEditors.IParameterEditor, found 0 (took 1ms)
+ 2016-12-17 12:18:50,237 [P3544/D2/T16] INFO  umbraco.BusinessLogic.Log - Log scrubbed.  Removed all items older than 2016-12-16 12:18:50
+ 2016-12-17 12:26:44,298 [P3544/D2/T57] INFO  Umbraco.Core.Security.BackOfficeSignInManager - Event Id: 0, state: Login attempt succeeded for username nitin from IP address ::1
+ 2016-12-17 12:26:44,300 [P3544/D2/T57] INFO  Umbraco.Core.Security.BackOfficeSignInManager - Event Id: 0, state: User: nitin logged in from IP address ::1
+ 2016-12-17 12:26:44,476 [P3544/D2/T57] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Web.Trees.TreeController
+ 2016-12-17 12:26:44,478 [P3544/D2/T57] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Web.Trees.TreeController, found 0 (took 2ms)
+ 2016-12-17 12:26:44,630 [P3544/D2/T53] INFO  Umbraco.Core.PluginManager - Starting resolution types of umbraco.interfaces.IApplication
+ 2016-12-17 12:26:44,631 [P3544/D2/T53] INFO  Umbraco.Core.PluginManager - Completed resolution of types of umbraco.interfaces.IApplication, found 0 (took 1ms)
+ 2016-12-17 12:26:44,685 [P3544/D2/T53] INFO  Umbraco.Core.PluginManager - Starting resolution types of umbraco.interfaces.ITree
+ 2016-12-17 12:26:44,687 [P3544/D2/T53] INFO  Umbraco.Core.PluginManager - Completed resolution of types of umbraco.interfaces.ITree, found 0 (took 1ms)
+ 2016-12-17 12:26:44,739 [P3544/D2/T53] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Web.Trees.TreeController
+ 2016-12-17 12:26:44,739 [P3544/D2/T53] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Web.Trees.TreeController, found 0 (took 0ms)
+ 2016-12-17 12:26:44,744 [P3544/D2/T53] INFO  Umbraco.Core.PluginManager - Starting resolution types of umbraco.interfaces.ITree
+ 2016-12-17 12:26:44,745 [P3544/D2/T53] INFO  Umbraco.Core.PluginManager - Completed resolution of types of umbraco.interfaces.ITree, found 0 (took 0ms)
+ 2016-12-17 12:29:17,202 [P3544/D2/T20] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'Global Settings' with Id '1159' has been published.
+ 2016-12-17 12:29:17,312 [P3544/D2/T20] INFO  Umbraco.Core.PluginManager - Starting resolution types of umbraco.interfaces.ICacheRefresher
+ 2016-12-17 12:29:17,313 [P3544/D2/T20] INFO  Umbraco.Core.PluginManager - Completed resolution of types of umbraco.interfaces.ICacheRefresher, found 0 (took 1ms)
+ 2016-12-17 12:29:21,471 [P3544/D2/T20] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'Global Settings' with Id '1159' has been published.
+ 2016-12-17 12:29:21,485 [P3544/D2/T14] INFO  umbraco.content - Save Xml to file...
+ 2016-12-17 12:29:21,522 [P3544/D2/T14] INFO  umbraco.content - Saved Xml to file.
+ 2016-12-17 12:29:25,573 [P3544/D2/T20] INFO  umbraco.content - Save Xml to file...
+ 2016-12-17 12:29:25,612 [P3544/D2/T20] INFO  umbraco.content - Saved Xml to file.
+ 2016-12-17 12:32:29,937 [P3544/D2/T50] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'SWEGON' with Id '1198' has been published.
+ 2016-12-17 12:32:30,123 [P3544/D2/T50] INFO  DotSee.AutoNode - AutoNode: Trying to automatically create node of type folderPortfolioSections for node 1198 of type pagePortfolioItem...
+ 2016-12-17 12:32:30,124 [P3544/D2/T50] INFO  DotSee.AutoNode - AutoNode: Aborting node creation due to rule restrictions. Parent node already has children, rule indicates that parent node should not have children
+ 2016-12-17 12:32:34,144 [P3544/D2/T50] INFO  umbraco.content - Save Xml to file...
+ 2016-12-17 12:32:34,161 [P3544/D2/T50] INFO  umbraco.content - Saved Xml to file.
+ 2016-12-17 12:33:01,272 [P3544/D2/T22] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'CTC' with Id '1196' has been published.
+ 2016-12-17 12:33:01,446 [P3544/D2/T22] INFO  DotSee.AutoNode - AutoNode: Trying to automatically create node of type folderPortfolioSections for node 1196 of type pagePortfolioItem...
+ 2016-12-17 12:33:01,446 [P3544/D2/T22] INFO  DotSee.AutoNode - AutoNode: Aborting node creation due to rule restrictions. Parent node already has children, rule indicates that parent node should not have children
+ 2016-12-17 12:33:05,454 [P3544/D2/T25] INFO  umbraco.content - Save Xml to file...
+ 2016-12-17 12:33:05,527 [P3544/D2/T25] INFO  umbraco.content - Saved Xml to file.
+ 2016-12-17 12:46:14,572 [P3544/D2/T91] INFO  Umbraco.Core.Logging.OwinLogger - Event Id: 0, state: User logged will be logged out due to timeout: nitin, IP Address: ::1
+ 2016-12-17 13:07:05,801 [P3544/D2/T81] INFO  Umbraco.Core.Security.BackOfficeSignInManager - Event Id: 0, state: Login attempt succeeded for username nitin from IP address ::1
+ 2016-12-17 13:07:05,801 [P3544/D2/T81] INFO  Umbraco.Core.Security.BackOfficeSignInManager - Event Id: 0, state: User: nitin logged in from IP address ::1
+ 2016-12-17 13:09:09,293 [P3544/D2/T153] ERROR Umbraco.Core.UmbracoApplicationBase - An unhandled exception occurred
+System.Net.Mail.SmtpFailedRecipientException: Postlådan är inte tillgänglig. Serverns svar var: <info@ventoil-luft.se> No such user here
+   vid System.Net.Mail.SmtpTransport.SendMail(MailAddress sender, MailAddressCollection recipients, String deliveryNotify, Boolean allowUnicode, SmtpFailedRecipientException& exception)
+   vid System.Net.Mail.SmtpClient.Send(MailMessage message)
+   vid DotSee.UmbracoExtensions.Utils.SendEmail(String mailFrom, String mailFromAlias, String mailTo, String subject, String message, String mailCc, String mailBcc)
+   vid DotSee.Controllers.ContactSurfaceController.Submit(ContactViewModel form)
+   vid lambda_method(Closure , ControllerBase , Object[] )
+   vid System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   vid System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   vid System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   vid System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   vid System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   vid System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   vid System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   vid System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   vid System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   vid System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   vid System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   vid System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   vid System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   vid System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   vid System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   vid System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   vid System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   vid System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+   vid System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   vid System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   vid System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   vid System.Web.Mvc.Controller.<BeginExecuteCore>b__1d(IAsyncResult asyncResult, ExecuteCoreState innerState)
+   vid System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   vid System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   vid System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   vid System.Web.Mvc.Controller.<BeginExecute>b__15(IAsyncResult asyncResult, Controller controller)
+   vid System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   vid System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   vid System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   vid System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   vid System.Web.Mvc.MvcHandler.<BeginProcessRequest>b__5(IAsyncResult asyncResult, ProcessRequestState innerState)
+   vid System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   vid System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   vid System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   vid System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   vid System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   vid System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+ 2016-12-17 13:10:29,546 [P3544/D2/T193] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Web.Trees.TreeController
+ 2016-12-17 13:10:29,547 [P3544/D2/T193] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Web.Trees.TreeController, found 0 (took 0ms)
+ 2016-12-17 13:14:41,389 [P3544/D2/T165] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'Ventoil' with Id '1148' has been published.
+ 2016-12-17 13:14:41,732 [P3544/D2/T165] INFO  DotSee.AutoNode - AutoNode: Trying to automatically create node of type folderConfiguration for node 1148 of type Pagehome...
+ 2016-12-17 13:14:41,935 [P3544/D2/T165] INFO  DotSee.AutoNode - AutoNode: Aborting node creation since node already exists
+ 2016-12-17 13:14:41,935 [P3544/D2/T165] INFO  DotSee.AutoNode - AutoNode: Trying to automatically create node of type folderHomeAssets for node 1148 of type Pagehome...
+ 2016-12-17 13:14:42,058 [P3544/D2/T165] INFO  DotSee.AutoNode - AutoNode: Aborting node creation since node already exists
+ 2016-12-17 13:14:42,058 [P3544/D2/T165] INFO  DotSee.AutoNode - AutoNode: Trying to automatically create node of type folderSections for node 1148 of type Pagehome...
+ 2016-12-17 13:14:42,177 [P3544/D2/T165] INFO  DotSee.AutoNode - AutoNode: Aborting node creation since node already exists
+ 2016-12-17 13:14:46,194 [P3544/D2/T195] INFO  umbraco.content - Save Xml to file...
+ 2016-12-17 13:14:46,281 [P3544/D2/T195] INFO  umbraco.content - Saved Xml to file.
+ 2016-12-17 13:15:19,618 [P3544/D2/T166] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'image1' with Id '0' has been published.
+ 2016-12-17 13:15:19,847 [P3544/D2/T166] INFO  DotSee.AutoNode - AutoNode: Trying to automatically create node of type folderLinkButtons for node 1207 of type dSliderImage...
+ 2016-12-17 13:15:19,995 [P3544/D2/T166] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'Buttons' with Id '0' has been published.
+ 2016-12-17 13:15:20,126 [P3544/D2/T166] INFO  DotSee.AutoNode - AutoNode: Bringing newly created node first...
+ 2016-12-17 13:15:20,630 [P3544/D2/T166] INFO  DotSee.AutoNode - AutoNode: Node created succesfully.
+ 2016-12-17 13:15:24,887 [P3544/D2/T168] INFO  umbraco.content - Save Xml to file...
+ 2016-12-17 13:15:25,081 [P3544/D2/T168] INFO  umbraco.content - Saved Xml to file.
+ 2016-12-17 13:15:41,012 [P3544/D2/T56] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'image2' with Id '0' has been published.
+ 2016-12-17 13:15:41,069 [P3544/D2/T56] INFO  DotSee.AutoNode - AutoNode: Trying to automatically create node of type folderLinkButtons for node 1209 of type dSliderImage...
+ 2016-12-17 13:15:41,120 [P3544/D2/T56] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'Buttons' with Id '0' has been published.
+ 2016-12-17 13:15:41,168 [P3544/D2/T56] INFO  DotSee.AutoNode - AutoNode: Bringing newly created node first...
+ 2016-12-17 13:15:41,323 [P3544/D2/T56] INFO  DotSee.AutoNode - AutoNode: Node created succesfully.
+ 2016-12-17 13:15:45,400 [P3544/D2/T184] INFO  umbraco.content - Save Xml to file...
+ 2016-12-17 13:15:45,450 [P3544/D2/T184] INFO  umbraco.content - Saved Xml to file.
+ 2016-12-17 13:15:58,224 [P3544/D2/T56] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'image3' with Id '0' has been published.
+ 2016-12-17 13:15:58,310 [P3544/D2/T56] INFO  DotSee.AutoNode - AutoNode: Trying to automatically create node of type folderLinkButtons for node 1211 of type dSliderImage...
+ 2016-12-17 13:15:58,421 [P3544/D2/T56] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'Buttons' with Id '0' has been published.
+ 2016-12-17 13:15:58,566 [P3544/D2/T56] INFO  DotSee.AutoNode - AutoNode: Bringing newly created node first...
+ 2016-12-17 13:15:59,095 [P3544/D2/T56] INFO  DotSee.AutoNode - AutoNode: Node created succesfully.
+ 2016-12-17 13:16:03,262 [P3544/D2/T56] INFO  umbraco.content - Save Xml to file...
+ 2016-12-17 13:16:03,319 [P3544/D2/T56] INFO  umbraco.content - Saved Xml to file.
+ 2016-12-17 13:16:16,132 [P3544/D2/T166] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'image4' with Id '0' has been published.
+ 2016-12-17 13:16:16,281 [P3544/D2/T166] INFO  DotSee.AutoNode - AutoNode: Trying to automatically create node of type folderLinkButtons for node 1213 of type dSliderImage...
+ 2016-12-17 13:16:16,369 [P3544/D2/T166] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'Buttons' with Id '0' has been published.
+ 2016-12-17 13:16:16,466 [P3544/D2/T166] INFO  DotSee.AutoNode - AutoNode: Bringing newly created node first...
+ 2016-12-17 13:16:16,848 [P3544/D2/T166] INFO  DotSee.AutoNode - AutoNode: Node created succesfully.
+ 2016-12-17 13:16:20,986 [P3544/D2/T56] INFO  umbraco.content - Save Xml to file...
+ 2016-12-17 13:16:21,021 [P3544/D2/T56] INFO  umbraco.content - Saved Xml to file.
+ 2016-12-17 13:16:31,201 [P3544/D2/T179] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'image2' with Id '1209' has been published.
+ 2016-12-17 13:16:31,243 [P3544/D2/T179] INFO  DotSee.AutoNode - AutoNode: Trying to automatically create node of type folderLinkButtons for node 1209 of type dSliderImage...
+ 2016-12-17 13:16:31,266 [P3544/D2/T179] INFO  DotSee.AutoNode - AutoNode: Aborting node creation since node already exists
+ 2016-12-17 13:16:35,276 [P3544/D2/T187] INFO  umbraco.content - Save Xml to file...
+ 2016-12-17 13:16:35,294 [P3544/D2/T187] INFO  umbraco.content - Saved Xml to file.
+ 2016-12-17 13:16:37,334 [P3544/D2/T196] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'image3' with Id '1211' has been published.
+ 2016-12-17 13:16:37,380 [P3544/D2/T196] INFO  DotSee.AutoNode - AutoNode: Trying to automatically create node of type folderLinkButtons for node 1211 of type dSliderImage...
+ 2016-12-17 13:16:37,410 [P3544/D2/T196] INFO  DotSee.AutoNode - AutoNode: Aborting node creation since node already exists
+ 2016-12-17 13:16:41,416 [P3544/D2/T187] INFO  umbraco.content - Save Xml to file...
+ 2016-12-17 13:16:41,451 [P3544/D2/T187] INFO  umbraco.content - Saved Xml to file.
+ 2016-12-17 13:16:43,661 [P3544/D2/T180] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'image4' with Id '1213' has been published.
+ 2016-12-17 13:16:43,821 [P3544/D2/T180] INFO  DotSee.AutoNode - AutoNode: Trying to automatically create node of type folderLinkButtons for node 1213 of type dSliderImage...
+ 2016-12-17 13:16:43,889 [P3544/D2/T180] INFO  DotSee.AutoNode - AutoNode: Aborting node creation since node already exists
+ 2016-12-17 13:16:47,919 [P3544/D2/T187] INFO  umbraco.content - Save Xml to file...
+ 2016-12-17 13:16:47,929 [P3544/D2/T187] INFO  umbraco.content - Saved Xml to file.
+ 2016-12-17 19:18:26,509 [P3544/D2/T16] INFO  umbraco.BusinessLogic.Log - Log scrubbed.  Removed all items older than 2016-12-16 19:18:26

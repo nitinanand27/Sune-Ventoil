@@ -1,0 +1,55 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionServices>
+
+@using DotSee.UmbracoExtensions
+
+@{
+    SectionServices currSection = Model;
+    int maxlength = 0;
+    int counter = 0;
+    string filler = "";
+}
+        <section id="section_@currSection.Id.ToString()" class="ptb-60 ptb-sm-60">
+            <div class="@currSection.GetSectionEffectCssClass() container text-center">
+                <h3>@currSection.Name</h3>
+                <div class="spacer-30"></div>
+                <div class="row col-lg-12 col-md-12">
+                    @foreach (DServiceItem item in currSection.Children<DServiceItem>())
+                    {
+                        counter++;
+                        //Get the maximum length of the 3 elements. We will add some nbsp's to the third element 
+                        //in order to fix any alignment issues.
+                        maxlength = (maxlength < item.Description.Length) ? item.Description.Length : maxlength;
+
+                        if ((counter % 3) == 0) {
+                            System.Text.StringBuilder sb = new System.Text.StringBuilder(string.Empty);
+                            for (int cnt = 1; cnt <= (maxlength-item.Description.Length); cnt++)
+                            {
+                                sb.Append("&nbsp;");
+                            }
+                            filler = sb.ToString();
+                            maxlength = 0;
+                        } else
+                        {
+                            filler = "";
+                        }
+                        LinkItem link = item.GetLink();
+                        string icon = (item.Icon ==null)? "ion-ios-film": item.Icon.ToString();
+
+                        <div class="col-md-4 mb-45">
+                            @if (string.IsNullOrEmpty(link.Url))
+                            {
+                                    <div class="page-icon-top"><i class="ion @icon"></i></div>
+                                    <h5>@item.Name</h5>
+                                    <p>@item.Description @Html.Raw(filler)</p>
+                            }
+                            else
+                            {
+                                <div class="page-icon-top"><a href="@link.Url" target="@link.Target"><i class="@icon"></i></a></div>
+                                <h5><a href="@link.Url" target="@link.Target">@item.Name</a></h5>
+                                <p>@item.Description @Html.Raw(filler)</p>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>

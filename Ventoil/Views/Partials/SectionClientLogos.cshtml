@@ -1,0 +1,65 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionClientLogos>
+@using DotSee.UmbracoExtensions
+
+@{
+    SectionClientLogos currSection = Model;
+    var logos = (currSection.RandomOrder)? currSection.Children<DClientLogoitem>().OrderBy(x=> Guid.NewGuid()) :  currSection.Children<DClientLogoitem>();
+
+}
+
+<section id="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() ptb-60 ptb-sm-60">
+    <div class="container">
+
+        @if (!currSection.HideTitle)
+        {
+            <div class="row text-center">
+                <h3>@currSection.Name</h3>
+            </div>
+            <div class="spacer-15"></div>
+        }
+        
+        <div class="owl-carousel client-carousel nf-carousel-theme ">
+      
+            @foreach (DClientLogoitem item in logos)
+            {
+                
+                <div class="item">
+                    @if (@currSection.HideTextBubbles) { 
+                        @DisplayClientLogo(item)
+                    } else {
+                        <div class="tipped" data-title="@item.Name" data-tipper-options='{"direction":"bottom"}'>
+                            @DisplayClientLogo(item)
+                        </div>
+                    } 
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@helper DisplayClientLogo (DClientLogoitem item)
+{
+
+Image img = (Image)Umbraco.TypedMedia(item.Logo);
+
+string imageUrl = (img == null) ? "" : img.GetCropUrl(width: 200, height: 200, imageCropMode: global::Umbraco.Web.Models.ImageCropMode.Max, upScale: false);
+
+LinkItem link = item.GetLink();
+
+    <div class="client-logo">
+
+        @if (!string.IsNullOrEmpty(link.Url))
+        {
+            <a href="@link.Url" target="@link.Target">
+                <img src="@imageUrl" alt="@item.Name" width="230" />
+            </a>
+        }
+        else
+        {
+            <img src="@imageUrl" alt="@item.Name" />
+
+        }
+    </div>
+
+}
+

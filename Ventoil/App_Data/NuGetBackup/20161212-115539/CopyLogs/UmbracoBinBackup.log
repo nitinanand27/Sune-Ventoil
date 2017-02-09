@@ -1,0 +1,91 @@
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust filkopiering f”r Windows                              
+-------------------------------------------------------------------------------
+
+  Startade: Mon Dec 12 11:55:40 2016
+
+   K„lla : C:\Users\Studerande\Documents\Visual Studio 2016\Ventoil\Ventoil\bin\
+     M†l : C:\Users\Studerande\Documents\Visual Studio 2016\Ventoil\Ventoil\App_Data\NuGetBackup\20161212-115539\bin\
+
+    Filer: *.*
+	    
+  Alternativ: *.* /S /E /COPY:DAT /R:1000000 /W:30 
+
+------------------------------------------------------------------------------
+
+	                  60	C:\Users\Studerande\Documents\Visual Studio 2016\Ventoil\Ventoil\bin\
+	    Nya filer       		  166400	AutoMapper.dll  0 %   78 %  100 %  
+	    Nya filer       		   28672	AutoMapper.Net4.dll  0 %  100 %  
+	    Nya filer       		  118784	businesslogic.dll  0 %  100 %  
+	    Nya filer       		  148480	ClientDependency.Core.dll  0 %   88 %  100 %  
+	    Nya filer       		   23552	ClientDependency.Core.Mvc.dll  0 %  100 %  
+	    Nya filer       		  520192	cms.dll  0 %   25 %   50 %   75 %  100 %  
+	    Nya filer       		   52224	controls.dll  0 %  100 %  
+	    Nya filer       		  122880	CookComputing.XmlRpcV2.dll  0 %  100 %  
+	    Nya filer       		   99328	Examine.dll  0 %  100 %  
+	    Nya filer       		  134656	HtmlAgilityPack.dll  0 %   97 %  100 %  
+	    Nya filer       		  200704	ICSharpCode.SharpZipLib.dll  0 %   65 %  100 %  
+	    Nya filer       		  178176	ImageProcessor.dll  0 %   73 %  100 %  
+	    Nya filer       		  111616	ImageProcessor.Web.dll  0 %  100 %  
+	    Nya filer       		   24576	interfaces.dll  0 %  100 %  
+	    Nya filer       		  258048	log4net.dll  0 %   50 %  100 %  
+	    Nya filer       		  786432	Lucene.Net.dll  0 %   33 %   66 %  100 %  
+	    Nya filer       		   54784	MarkdownSharp.dll  0 %  100 %  
+	    Nya filer       		   11264	Microsoft.ApplicationBlocks.Data.dll  0 %  100 %  
+	    Nya filer       		  171672	Microsoft.AspNet.Identity.Core.dll  0 %   76 %  100 %  
+	    Nya filer       		   54944	Microsoft.AspNet.Identity.Owin.dll  0 %  100 %  
+	    Nya filer       		   3.8 m	Microsoft.CodeAnalysis.CSharp.dll  0 %   13 %   26 %   39 %   52 %   65 %   78 %   91 %  100 %  
+	    Nya filer       		   1.6 m	Microsoft.CodeAnalysis.dll  0 %   15 %   30 %   45 %   60 %   76 %   91 %  100 %  
+	    Nya filer       		   29344	Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll  0 %  100 %  
+	    Nya filer       		    1805	Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml  0 %  100 %  
+	    Nya filer       		  101032	Microsoft.Owin.dll  0 %  100 %  
+	    Nya filer       		  133288	Microsoft.Owin.Host.SystemWeb.dll  0 %   98 %  100 %  
+	    Nya filer       		   36520	Microsoft.Owin.Security.Cookies.dll  0 %  100 %  
+	    Nya filer       		   53416	Microsoft.Owin.Security.dll  0 %  100 %  
+	    Nya filer       		   77488	Microsoft.Owin.Security.OAuth.dll  0 %  100 %  
+	    Nya filer       		   45416	Microsoft.Web.Infrastructure.dll  0 %  100 %  
+	    Nya filer       		  396288	MiniProfiler.dll  0 %   33 %   66 %   99 %  100 %  
+	    Nya filer       		  424448	MySql.Data.dll  0 %   30 %   61 %   92 %  100 %  
+	    Nya filer       		  513536	Newtonsoft.Json.dll  0 %   25 %   51 %   76 %  100 %  
+	    Nya filer       		    4608	Owin.dll  0 %  100 %  
+	    Nya filer       		   10240	Semver.dll  0 %  100 %  
+	    Nya filer       		   19968	SQLCE4Umbraco.dll  0 %  100 %  
+	    Nya filer       		  204544	System.Collections.Immutable.dll  0 %   64 %  100 %  
+	    Nya filer       		  470696	System.Data.SqlServerCe.dll  0 %   27 %   55 %   83 %  100 %  
+	    Nya filer       		  240808	System.Data.SqlServerCe.Entity.dll  0 %   54 %  100 %  
+	    Nya filer       		  185544	System.Net.Http.Formatting.dll  0 %   70 %  100 %  
+	    Nya filer       		  262896	System.Reflection.Metadata.dll  0 %   49 %   99 %  100 %  
+	    Nya filer       		  139976	System.Web.Helpers.dll  0 %   93 %  100 %  
+	    Nya filer       		  471240	System.Web.Http.dll  0 %   27 %   55 %   83 %  100 %  
+	    Nya filer       		   82120	System.Web.Http.WebHost.dll  0 %  100 %  
+	    Nya filer       		  566472	System.Web.Mvc.dll  0 %   46 %   92 %  100 %  
+	    Nya filer       		  272072	System.Web.Razor.dll  0 %   48 %   96 %  100 %  
+	    Nya filer       		   41672	System.Web.WebPages.Deployment.dll  0 %  100 %  
+	    Nya filer       		  211656	System.Web.WebPages.dll  0 %   61 %  100 %  
+	    Nya filer       		   39624	System.Web.WebPages.Razor.dll  0 %  100 %  
+	    Nya filer       		  192512	TidyNet.dll  0 %   68 %  100 %  
+	    Nya filer       		   2.4 m	Umbraco.Core.dll  0 %   20 %   41 %   62 %   82 %  100 %  
+	    Nya filer       		   38912	umbraco.DataLayer.dll  0 %  100 %  
+	    Nya filer       		   2.1 m	umbraco.dll  0 %   23 %   46 %   69 %   92 %  100 %  
+	    Nya filer       		  372736	umbraco.editorControls.dll  0 %   35 %   70 %  100 %  
+	    Nya filer       		  131584	umbraco.MacroEngines.dll  0 %   99 %  100 %  
+	    Nya filer       		   98816	Umbraco.ModelsBuilder.dll  0 %  100 %  
+	    Nya filer       		   38400	umbraco.providers.dll  0 %  100 %  
+	    Nya filer       		   57344	Umbraco.Web.UI.dll  0 %  100 %  
+	    Nya filer       		   60416	UmbracoExamine.dll  0 %  100 %  
+	    Nya filer       		   22528	UrlRewritingNet.UrlRewriter.dll  0 %  100 %  
+
+------------------------------------------------------------------------------
+
+                  Totalt    Kopierat  ™verhoppat  Ej matchat  MISSLYCKAT       Extra
+  Kataloger:           1           0           1           0           0           0
+      Filer:          60          60           0           0           0           0
+       Byte:     18.91 m     18.91 m           0           0           0           0
+      Tider:     0:00:00     0:00:00                             0:00:00     0:00:00
+
+
+  Hastighet:                32891683 Byte/sekund
+  Hastighet:                1882.077 MB/minut
+
+ Avslutades: Mon Dec 12 11:55:41 2016

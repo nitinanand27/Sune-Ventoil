@@ -1,0 +1,50 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionContact>
+
+@using DotSee.Models;
+@using DotSee.UmbracoExtensions;
+
+@{
+
+    SectionContact currSection = Model;
+    string currSectionId = currSection.Id.ToString();
+
+    string[] dropDown1Data = currSection.Dropdown1Values.Split(new string[] { "\n", "\n\r" }, StringSplitOptions.RemoveEmptyEntries);
+    string[] dropDown2Data = currSection.Dropdown2Values.Split(new string[] { "\n", "\n\r" }, StringSplitOptions.RemoveEmptyEntries);
+
+}
+
+<section id="contactForm_@currSectionId" class="@currSection.GetSectionEffectCssClass() ptb-60 ptb-sm-60">
+    <div class="container">
+
+        @if (!string.IsNullOrEmpty(currSection.IntroText) || !currSection.HideTitle)
+        {
+            
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+
+                    @if (!currSection.HideTitle)
+                    {
+                        <h3>@currSection.Name</h3>
+                    }
+
+                    @if (!string.IsNullOrEmpty(currSection.IntroText))
+                    {
+                        <p class="lead">@currSection.IntroText</p>
+                    }
+
+                </div>
+            </div>
+            <div class="spacer-15"></div>
+        }
+
+        @Html.Partial("ContactView", new ContactViewModel()
+                   , new ViewDataDictionary
+                   {
+                         { "currSectionId", currSection.Id.ToString() }
+                       , { "hideSubject", currSection.HideSubject }
+                       , { "hideName", currSection.HideName }
+                       , { "dropDown1Data", dropDown1Data }
+                       , { "dropDown2Data", dropDown2Data }
+                   })
+        </div>
+</section>

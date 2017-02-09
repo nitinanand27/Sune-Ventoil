@@ -1,0 +1,23 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage
+@{
+    IPublishedContent currPage = Model;
+    Pagehome homePage = (Pagehome)currPage.AncestorOrSelf(1);
+    ConfigGlobalSettings configPage = homePage.Descendant<ConfigGlobalSettings>();
+
+    string logo = configPage.DefaultLogo.IfNull(x => "").ToString();
+    string alternateLogo = configPage.AlternateLogo.IfNull(x => "").ToString();
+
+    if (string.IsNullOrEmpty(alternateLogo)) { alternateLogo = logo; }
+
+}
+@{  if (logo != "")
+    {
+        <div class="logo">
+            <a href="@Umbraco.Url(homePage.Id)">
+                <img class="l-black" src="@logo" />
+                <img class="l-white" src="@alternateLogo" />
+                <img class="l-color" src="@logo" />
+            </a>
+        </div>
+    }
+}

@@ -1,0 +1,66 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionStatement>
+
+@using DotSee.UmbracoExtensions;
+
+@{
+    SectionStatement currSection = Model;
+
+    string videoId = currSection.YoutubeId;
+    LinkItem link = currSection.GetLink();
+    string targetUrl = "";
+    string target = "";
+    string linkClass = "";
+    if (!string.IsNullOrEmpty(videoId))
+    {
+        targetUrl = string.Format("http://www.youtube.com/embed/{0}?rel=0&autoplay=1&amp;wmode=transparent", videoId);
+        target = "_self";
+        linkClass = "cbox-iframe";
+    }
+    else
+    {
+        if (!string.IsNullOrEmpty(link.Url))
+        {
+            targetUrl = link.Url;
+            target = link.Target;
+        }
+    }
+
+    IPublishedContent backgroundImage = Umbraco.TypedMedia(currSection.Image);
+    string bgImageCss = "";
+    string overlayCss = (currSection.UseOverlay) ?
+        (currSection.UseLightOverlay) ? "overlay-light" : "overlay-dark"
+        : "";
+    string colorCss = (currSection.UseLightTextColor) ? "dark-bg" :"light-bg";
+
+    if (backgroundImage != null)
+    {
+        bgImageCss = "style=\"background-size:cover;background-image: url('" + backgroundImage.GetCropUrl(propertyAlias: "umbracoFile", upScale: true, width:1920, height:400) + "');\"";
+    }
+    string buttonCss = (currSection.UseLightTextColor ? "btn-white" : "btn-black");
+}
+
+<section id="section_@currSection.Id.ToString()" class="@currSection.GetSectionEffectCssClass() @overlayCss @colorCss ptb-60 ptb-sm-60" @Html.Raw(bgImageCss)>
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <a class="@linkClass" href="@targetUrl" target="@target">
+                    @if (currSection.Icon != null)
+                    {
+                    <div class="page-icon-top"><i class="ion @currSection.Icon.ToString()"></i></div>
+                    }
+                </a>
+                <h4>@currSection.Name</h4>
+                @if (!string.IsNullOrEmpty(currSection.Text))
+                {
+                <p>@currSection.Text</p>
+                }
+                @if (!string.IsNullOrEmpty(currSection.ButtonText))
+                {
+                    <div class="spacer-15"></div>
+                    <a class="@linkClass btn btn-md @buttonCss" target="@target" href="@targetUrl">@currSection.ButtonText</a>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+

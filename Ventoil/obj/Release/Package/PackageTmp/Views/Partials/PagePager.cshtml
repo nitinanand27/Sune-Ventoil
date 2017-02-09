@@ -1,0 +1,81 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage
+@using DotSee.UmbracoExtensions;
+@{
+    int page;
+    int.TryParse(ViewData["page"].ToString(), out page);
+    page = page < 1 ? 1 : page;
+
+    int recordsPerPage;
+    int.TryParse(ViewData["recordsPerPage"].ToString(), out recordsPerPage);
+    recordsPerPage = recordsPerPage < 1 ? 9 : recordsPerPage;
+
+    int totalItems;
+    int.TryParse(ViewData["totalItems"].ToString(), out totalItems);
+    totalItems = totalItems < 1 ? 1 : totalItems;
+
+    int totalPages;
+    int.TryParse(ViewData["totalPages"].ToString(), out totalPages);
+    totalPages = totalPages < 1 ? 1 : totalPages;
+
+
+
+    if (page > totalPages) { page = totalPages; }
+
+    string prevLink = Utils.UpdateQueryString(HttpContext.Current.Request, "page", (page - 1).ToString());
+    string nextLink = Utils.UpdateQueryString(HttpContext.Current.Request, "page", (page + 1).ToString());
+    int recordFrom = ((page - 1) * recordsPerPage + 1);
+    int recordTo = ((page - 1) * recordsPerPage + recordsPerPage);
+    if (recordTo > totalItems) { recordTo = totalItems; }
+}
+
+<div class="pagination-nav text-left mt-60 mtb-xs-30">
+    <ul>
+        @if (page > 1)
+        {
+            <li><a href="@prevLink"><i class="fa fa-angle-left"></i></a></li>
+        }
+        
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            string activeCss = (page == i) ? "active": null;
+
+        <li class="@activeCss"><a href="@Utils.UpdateQueryString(HttpContext.Current.Request,"page",i.ToString())">@i</a></li>
+        }
+        
+        @if (page < totalPages)
+        {
+            <li><a href="@nextLink"><i class="fa fa-angle-right"></i></a></li>
+        }
+    </ul>
+</div>
+
+
+
+
+@helper GetTopRightPager(int totalPages, int page)
+{
+
+if (totalPages > 1)
+{
+        <div class="paging">
+            @{
+
+                //Show the "prev" link if we are past the first page and we have enough pages.
+                if (page > 1)
+                {
+                    <a id="pager_@(page-1)" href="@Utils.UpdateQueryString(HttpContext.Current.Request,"page",(page-1).ToString())">&lt;&nbsp;&nbsp;</a>
+                }
+
+                <span>@page @Umbraco.GetDictionaryValue("Pager.Of") @totalPages</span>
+
+                //Show the "next" link if we are not on the last page and we have enough pages
+                if (page < totalPages)
+                {
+                    <a id="pager_@(page+1)" href="@Utils.UpdateQueryString(HttpContext.Current.Request,"page",(page+1).ToString())">&nbsp;&nbsp;&gt;</a>
+                }
+
+            }
+
+        </div>
+                }
+}

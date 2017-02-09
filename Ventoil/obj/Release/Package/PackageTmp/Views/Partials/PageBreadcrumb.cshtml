@@ -1,0 +1,35 @@
+﻿﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage
+@using Umbraco.Core.Models;
+@using DotSee.UmbracoExtensions;
+
+@{
+    IPublishedContent currPage =  Model;
+    string[] breadcrumbIds = currPage.Path.Split(',');
+
+    foreach (string breadcrumbId in breadcrumbIds)
+    {
+        int id = int.Parse(breadcrumbId);
+        if (id > 0)
+        {
+            //If we have a "currPage" viewdata item, then the last node in the path is NOT the actual last node.
+            //This is due to inheritance - we've inherited background images from the current page (portfolio or blog) so the model is the 
+            //portfolio or blog's root page, but we need to show the actual item in the path too.
+            bool isLast = breadcrumbId.Equals(breadcrumbIds.Last()) && ViewData["currPage"] == null;
+
+            IPublishedContent item = Umbraco.TypedContent(id);
+            if (item.IsVisible() && !isLast)
+            {
+                    <a href="@Umbraco.NiceUrl(id)">@item.GetPageTitleForBreadcrumb()</a> @Html.Raw("/ ");
+            }
+            if (isLast)
+            {
+                <span>@item.GetPageTitleForBreadcrumb()</span>
+            }
+        }
+    }
+    if (ViewData["currPage"] != null)
+    {
+        var item = (IPublishedContent) ViewData["currPage"];
+        <span>@item.GetPageTitleForBreadcrumb()</span>
+    }
+}

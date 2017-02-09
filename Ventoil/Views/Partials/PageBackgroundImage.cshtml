@@ -1,0 +1,39 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<IAbstractPageBackgroundImage>
+@using DotSee.UmbracoExtensions;
+@{
+            IAbstractPageBackgroundImage currPage = Model;
+            Pagehome homePage = (Pagehome)Model.AncestorOrSelf(1);
+            ConfigGlobalSettings configPage = homePage.Descendant<ConfigGlobalSettings>();
+
+            bool hideBreadcrumb = (configPage.HideBreadcrumbs || currPage.HideBreadcrumb);
+
+            string overlayCss = (currPage.UseOverlay) ? (currPage.UseLightOverlay) ? "overlay-light" : "overlay-dark" : "";
+            string smallIntroCss = (currPage.LargeHeight) ? "" : "inner-intro-small";
+
+            string textCss = (currPage.UseLightTextColor) ? "light-color" : "";
+
+            if (!string.IsNullOrEmpty(currPage.PageBackgroundImage))
+            {
+                string bgImageUrl = currPage.GetPickerMediaByValue(currPage.PageBackgroundImage).First().GetCropUrl(width: 1920, height:600, upScale: true);
+
+                <section class="inner-intro @smallIntroCss @overlayCss parallax parallax-background2" style="background:url(@bgImageUrl);">
+                    <div class="container">
+                        <div class="row title @textCss">
+                            <h1 class="h1">@currPage.GetPageTitleInternal()</h1>
+                            @if (!hideBreadcrumb || !string.IsNullOrEmpty(currPage.Summary))
+                            {
+                                <div class="page-breadcrumb">
+                                    @if (!hideBreadcrumb)
+                                    {
+                                        @Html.Partial("Pagebreadcrumb", currPage, new ViewDataDictionary { {"currPage", ViewData["currPage"]} })
+                                        <br />
+                                    }
+                                    @currPage.Summary
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </section>
+                <div class="clearfix"></div>
+            }
+}

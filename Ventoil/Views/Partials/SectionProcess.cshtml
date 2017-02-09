@@ -1,0 +1,66 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<SectionProcess>
+
+@using DotSee.UmbracoExtensions
+
+@{
+    SectionProcess currSection = Model;
+}
+        <section id="section_@currSection.Id.ToString()" class="ptb-60 ptb-sm-60">
+            <div class="@currSection.GetSectionEffectCssClass() container text-center">
+                <h3>@currSection.Name</h3>
+                <div class="spacer-60"></div>
+                <div class="row">
+
+                    @foreach (DProcessItem item in currSection.Children<DProcessItem>()) {
+
+                        string icon = item.Icon.ToString();
+                        string bubbleText = item.BubbleText;
+                        LinkItem link = item.GetLink();
+                        
+                    <div class="col-md-2 col-sm-4 col-xs-6">
+                        @DisplayProcessItem(icon, item.Name, bubbleText, currSection, link)
+                    </div>
+                    }
+                  
+                </div>
+            </div>
+        </section>
+
+@helper DisplayProcessItem(string icon, string title, string bubbleText, SectionProcess currSection)
+{
+    if (string.IsNullOrEmpty(bubbleText))
+    {
+        @DisplayProcessItem(icon, title)
+}
+else {
+
+    string bubblePosition = (currSection.BubblePosition==null) ? "top" : currSection.BubblePosition.ToString().ToLower();
+
+        <div class="tipped" data-title="@bubbleText" data-tipper-options='{
+             "direction":"@bubblePosition", 
+             "follow":@currSection.BubbleFollow.ToString().ToLower(), 
+             "delay":"@currSection.BubbleDelay.ToString()"
+             }'>
+            @DisplayProcessItem(icon, title)
+        </div>
+    }
+}
+
+@helper DisplayProcessItem(string icon, string title)
+{
+    <div class="page-icon-top"><i class="ion @icon"></i></div>
+    <h6>@title</h6>
+}
+
+@helper DisplayProcessItem(string icon, string title, string bubbleText, SectionProcess currSection, LinkItem link)
+{
+            if (string.IsNullOrEmpty(link.Url))
+            {
+                @DisplayProcessItem(icon, title, bubbleText, currSection)
+            }
+            else {
+                <a href="@link.Url" target="@link.Target">
+                    @DisplayProcessItem(icon, title, bubbleText, currSection)
+                </a>
+            }
+}
